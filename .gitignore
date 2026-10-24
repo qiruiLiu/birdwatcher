@@ -1,0 +1,10 @@
+data/all/
+*.pth
+__pycache__/
+*.pyc
+fetch_provinces.py
+train.py
+export_onnx.py
+bird_provinces_auto.json
+bird_best.pth
+bird_best_backup_*.pthdata/thumb/

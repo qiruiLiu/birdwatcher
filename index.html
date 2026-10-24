@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>羽见 · 观鸟 AI 图鉴平台</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#4a7c59" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="brand" onclick="location.hash='#/home'">
+    <span class="logo">🪶</span>
+    <span class="brand-name">羽见<span class="brand-sub">BirdWatch</span></span>
+  </div>
+  <nav class="nav">
+    <a href="#/home">首页</a>
+    <a href="#/identify">AI 识别</a>
+    <a href="#/map">分布地图</a>
+
+    <a href="#/collection">我的图鉴</a>
+    <a href="#/guide">观鸟科普</a>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="菜单">☰</button>
+</header>
+
+<main id="app">
+
+  <!-- 首页 -->
+  <section id="page-home" class="page">
+    <div class="hero">
+      <h1>用 AI，认识每一只飞过的鸟</h1>
+      <p class="hero-sub">上传一张照片，秒得鸟种、习性、保护等级与分布——你的口袋观鸟图鉴。</p>
+      <div class="hero-btns">
+        <a class="btn btn-primary" href="#/identify">开始识别</a>
+        <a class="btn btn-ghost" href="#/guide">观鸟入门</a>
+      </div>
+    </div>
+
+    <div class="features">
+      <article class="feature-card" onclick="location.hash='#/guide'" data-hover="请查收你的鸟类观察指南">
+        <div class="feature-ico">📖</div>
+        <h3 class="feature-label">观鸟入门</h3>
+      </article>
+      <article class="feature-card" onclick="location.hash='#/identify'" data-hover="上传照片，AI 秒识别鸟种">
+        <div class="feature-ico">🔬</div>
+        <h3 class="feature-label">AI 识别</h3>
+      </article>
+      <article class="feature-card" onclick="location.hash='#/map'" data-hover="查看鸟种在中国的分布">
+        <div class="feature-ico">🗺️</div>
+        <h3 class="feature-label">分布情况</h3>
+      </article>
+      <article class="feature-card" onclick="location.hash='#/collection'" data-hover="收集你的观鸟图鉴">
+        <div class="feature-ico">📚</div>
+        <h3 class="feature-label">图鉴收集</h3>
+      </article>
+    </div>
+
+    <section class="daily">
+      <h2>每日一鸟</h2>
+      <div id="dailyCard" class="daily-card"></div>
+    </section>
+  </section>
+
+  <!-- AI 识别 -->
+  <section id="page-identify" class="page">
+    <h2 class="page-title">AI 鸟类识别</h2>
+    <div class="identify-wrap">
+      <div class="upload-area" id="uploadArea">
+        <input type="file" id="fileInput" accept="image/*" hidden />
+        <div class="upload-inner">
+          <div class="upload-ico">📷</div>
+          <p>点击选择图片，或拖拽到此处</p>
+          <span class="upload-tip">支持 JPG / PNG，建议 ≤ 2MB</span>
+        </div>
+      </div>
+      <div class="identify-result" id="identifyResult" hidden>
+        <div class="result-image-wrap">
+          <img id="resultImg" alt="待识别图片" />
+        </div>
+        <div class="result-info">
+          <div class="result-badge" id="resultBadge">识别中…</div>
+          <h3 id="resultName"></h3>
+          <p class="latin" id="resultLatin"></p>
+          <p class="protect" id="resultProtect"></p>
+          <div class="result-meta">
+            <div><span class="meta-k">食性</span><span id="resultDiet"></span></div>
+            <div><span class="meta-k">习性</span><span id="resultHabit"></span></div>
+            <div><span class="meta-k">繁殖</span><span id="resultBreeding"></span></div>
+          </div>
+          <div class="result-candidates" id="resultCandidates"></div>
+          <div class="result-actions">
+            <button class="btn btn-primary" id="saveToCollection">加入图鉴</button>
+            <a class="btn btn-ghost" id="viewDistribution" href="#/map">📍 查看分布</a>
+            <button class="btn btn-ghost" id="reportError">⚠️ 识别有误？</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="identify-bottom-links">
+      <a href="#/history" class="bottom-link">📋 更多历史记录 →</a>
+    </div>
+    <div class="modal" id="errorModal" hidden>
+      <div class="modal-box">
+        <h3>⚠️ 识别有误报告</h3>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:12px">感谢反馈！请描述识别错误的情况，我们会记录并改进模型。</p>
+        <label>正确鸟种（如知道）<input type="text" id="errCorrectBird" placeholder="如：实际是白头鹎" /></label>
+        <label>问题描述 <textarea id="errDesc" rows="3" placeholder="如：把喜鹊识别成了鸽子..."></textarea></label>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" id="errCancel">取消</button>
+          <button class="btn btn-primary" id="errSubmit">提交报告</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 识别记录（隐藏页，通过链接访问） -->
+  <section id="page-history" class="page">
+    <h2 class="page-title">📋 识别记录</h2>
+    <p class="history-tip">每次 AI 识别自动记录于此。点击"加入图鉴"可收藏到图鉴。</p>
+    <div class="search-bar">
+      <input type="text" id="historySearch" class="search-input" placeholder="🔍 搜索鸟名…" />
+      <select id="historySort" class="sort-select">
+        <option value="date-desc">日期 ↓</option>
+        <option value="date-asc">日期 ↑</option>
+        <option value="bird">按鸟种</option>
+      </select>
+    </div>
+    <div id="historyGrid" class="history-grid"></div>
+  </section>
+
+  <!-- 分布地图（ECharts 中国分布） -->
+  <section id="page-map" class="page">
+    <h2 class="page-title">鸟种中国分布</h2>
+    <div class="dist-controls">
+      <label>选择鸟种
+        <select id="distBirdSelect"></select>
+      </label>
+      <span id="distHint" class="map-hint"></span>
+    </div>
+    <div id="echartsMap" class="echarts-map"></div>
+    <div id="distInfo" class="dist-info"></div>
+  </section>
+
+  <!-- 我的图鉴 -->
+  <section id="page-collection" class="page">
+    <h2 class="page-title">我的观鸟图鉴</h2>
+    <div class="coll-tabs">
+      <button class="coll-tab active" data-tab="ai">AI 识别图鉴</button>
+      <button class="coll-tab" data-tab="collected">已收集</button>
+    </div>
+    <div id="collTabAi" class="coll-tab-content">
+      <div class="collection-bar">
+        <div class="achievements" id="achievements"></div>
+      </div>
+      <div id="aiBirdGrid" class="collection-grid"></div>
+    </div>
+    <div id="collTabCollected" class="coll-tab-content" hidden>
+      <div class="collection-bar">
+        <input type="text" id="collSearch" class="search-input" placeholder="🔍 搜索鸟名…" />
+        <button class="btn btn-primary" id="addRecordBtn">＋ 手动添加</button>
+        <button class="btn btn-ghost" id="exportCsvBtn">导出 CSV</button>
+        <button class="btn btn-ghost" id="exportJsonBtn">导出 JSON</button>
+      </div>
+      <div id="collectionGrid" class="collection-grid"></div>
+    </div>
+
+    <div class="modal" id="recordModal" hidden>
+      <div class="modal-box">
+        <h3>添加观测记录</h3>
+        <label>鸟种
+          <select id="recBird"></select>
+        </label>
+        <label>观测日期 <input type="date" id="recDate" /></label>
+        <label>观测地点 <input type="text" id="recLocation" placeholder="如：成都浣花溪公园" /></label>
+        <label>照片 <input type="file" id="recFile" accept="image/*" /></label>
+        <label>备注 <textarea id="recNote" rows="2"></textarea></label>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" id="recCancel">取消</button>
+          <button class="btn btn-primary" id="recSave">保存</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 观鸟科普 -->
+  <section id="page-guide" class="page">
+    <h2 class="page-title">观鸟入门科普</h2>
+    <div class="guide-tabs">
+      <button class="guide-tab active" data-tab="gear">基础装备</button>
+      <button class="guide-tab" data-tab="etiquette">野外礼仪</button>
+      <button class="guide-tab" data-tab="hotspot">热门观鸟点</button>
+      <button class="guide-tab" data-tab="mistake">常见误区</button>
+    </div>
+    <div class="guide-content" id="guideContent"></div>
+  </section>
+
+  <!-- 加入图鉴弹窗 -->
+  <div class="modal" id="saveCollModal" hidden>
+    <div class="modal-box">
+      <h3>📚 加入图鉴</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:12px">可补充观测信息（选填），方便日后回顾。</p>
+      <label>鸟种 <input type="text" id="saveCollBird" readonly /></label>
+      <label>观测日期 <input type="date" id="saveCollDate" /></label>
+      <label>观测地点 <input type="text" id="saveCollLocation" placeholder="如：成都浣花溪公园" /></label>
+      <label>观测描述 <textarea id="saveCollNote" rows="3" placeholder="如：清晨在湖边柳树上发现，正在觅食昆虫…"></textarea></label>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="saveCollCancel">取消</button>
+        <button class="btn btn-primary" id="saveCollConfirm">保存到图鉴</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 编辑描述弹窗 -->
+  <div class="modal" id="editDescModal" hidden>
+    <div class="modal-box">
+      <h3>✏️ 编辑观测信息</h3>
+      <label>观测日期 <input type="date" id="editDate" /></label>
+      <label>观测地点 <input type="text" id="editLocation" placeholder="如：成都浣花溪公园" /></label>
+      <label>观测描述 <textarea id="editNote" rows="3" placeholder="如：清晨在湖边柳树上发现…"></textarea></label>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="editCancel">取消</button>
+        <button class="btn btn-primary" id="editSave">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 卡片盒查看弹窗 -->
+  <div class="modal" id="boxModal" hidden>
+    <div class="modal-box box-modal-box">
+      <div class="box-header">
+        <h3 id="boxTitle"></h3>
+        <button class="box-close" id="boxClose">✕</button>
+      </div>
+      <div class="box-viewer">
+        <button class="box-nav box-prev" id="boxPrev">‹</button>
+        <div class="box-card-area" id="boxCardArea"></div>
+        <button class="box-nav box-next" id="boxNext">›</button>
+      </div>
+      <div class="box-counter" id="boxCounter"></div>
+      <div class="box-actions">
+        <button class="btn btn-ghost" id="boxEdit">✏️ 编辑描述</button>
+        <button class="btn btn-ghost" id="boxDelete">🗑 删除此条</button>
+        <a class="btn btn-primary" id="boxDist">📍 查看分布</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI鸟类详情盒弹窗 -->
+  <div class="modal" id="aiBirdBoxModal" hidden>
+    <div class="modal-box box-modal-box">
+      <div class="box-header">
+        <h3 id="aiBoxTitle"></h3>
+        <button class="box-close" id="aiBoxClose">✕</button>
+      </div>
+      <div class="ai-box-content" id="aiBoxContent"></div>
+      <div class="box-actions">
+        <a class="btn btn-primary" id="aiBoxDist">📍 查看分布</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 图片裁剪弹窗 -->
+  <div class="modal" id="cropModal" hidden>
+    <div class="modal-box crop-modal-box">
+      <h3>✂️ 裁剪识别区域</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:12px">拖拽方框选中鸟类区域，可提升识别准确率。</p>
+      <div class="crop-container" id="cropContainer">
+        <canvas id="cropCanvas"></canvas>
+        <div class="crop-box" id="cropBox"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="cropSkip">直接识别</button>
+        <button class="btn btn-primary" id="cropConfirm">裁剪并识别</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <p>羽见 BirdWatch · 前端课程课设作品 · 数据仅供演示</p>
+  <p class="footer-tip">提示：本页需联网加载地图瓦片；图鉴数据存储于浏览器本地 IndexedDB。</p>
+</footer>
+
+
+<script src="ort.min.js"></script>
+<script src="echarts.min.js"></script>
+<script src="app.js"></script>
+<script>
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+</script>
+</body>
+</html>
