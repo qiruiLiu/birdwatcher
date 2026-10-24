@@ -79,6 +79,29 @@ const BIRD_PROVINCES = {
   17: ["浙江", "山东", "江苏", "上海", "北京", "广东", "安徽", "福建", "河北", "河南", "江西", "四川", "陕西", "山西", "湖北", "天津", "辽宁", "黑龙江", "云南", "甘肃", "内蒙古", "广西", "湖南", "贵州", "重庆", "青海", "吉林", "海南"],
 };
 
+function showToast(msg, type){
+  const toast = document.createElement("div");
+  toast.className = "toast" + (type==="error" ? " toast-error" : "");
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  requestAnimationFrame(()=>toast.classList.add("toast-show"));
+  setTimeout(()=>{
+    toast.classList.remove("toast-show");
+    setTimeout(()=>toast.remove(),300);
+  },2500);
+}
+
+function showConfirm(msg, onConfirm){
+  const modal = document.getElementById("confirmModal");
+  document.getElementById("confirmMsg").textContent = msg;
+  modal.hidden = false;
+  const yes = document.getElementById("confirmYes"), no = document.getElementById("confirmNo");
+  const cleanup = ()=>{ modal.hidden=true; yes.onclick=null; no.onclick=null; modal.onclick=null; };
+  yes.onclick = ()=>{ cleanup(); onConfirm(); };
+  no.onclick = cleanup;
+  modal.onclick = e=>{ if(e.target===modal) cleanup(); };
+}
+
 function openDB(){
   return new Promise((res,rej)=>{
     const req = indexedDB.open("birdwatcher",1);
@@ -128,7 +151,7 @@ function renderDaily(){
   const b = BIRDS[idx];
   const card = document.getElementById("dailyCard");
   card.innerHTML = `
-    <div class="dc-emoji">${b.emoji}</div>
+    <div class="dc-emoji"></div>
     <div class="dc-info">
       <h3>${b.nameCn} <span style="font-weight:400;color:var(--muted);font-size:13px">${b.protect}</span></h3>
       <p class="latin">${b.nameLatin}</p>
@@ -254,7 +277,7 @@ async function realRecognize(blob){
 
 let currentRecognition = null;
 async function handleFile(file){
-  if(!file || !file.type.startsWith("image/")){alert("请选择图片文件");return;}
+  if(!file || !file.type.startsWith("image/")){showToast("请选择图片文件");return;}
   const result = document.getElementById("identifyResult");
   result.hidden = false;
   document.getElementById("resultBadge").textContent = "识别中…";
@@ -274,7 +297,7 @@ async function handleFile(file){
     showResult(cands, blob);
   }catch(err){
     document.getElementById("resultBadge").textContent = "识别失败";
-    alert(err);
+    showToast(err);
   }
 }
 
@@ -303,7 +326,7 @@ function showResult(cands, blob){
   document.getElementById("resultDiet").textContent = b.diet;
   document.getElementById("resultHabit").textContent = b.habit;
   document.getElementById("resultBreeding").textContent = b.breeding;
-  const candHtml = cands.map(c=>`<span class="cand" data-id="${c.bird.id}">${c.bird.emoji} ${c.bird.nameCn} ${(c.prob*100).toFixed(0)}%</span>`).join("");
+  const candHtml = cands.map(c=>`<span class="cand" data-id="${c.bird.id}">${c.bird.nameCn} ${(c.prob*100).toFixed(0)}%</span>`).join("");
   document.getElementById("resultCandidates").innerHTML = "候选："+candHtml;
   const setMapJump = (bird)=>{
     document.getElementById("viewDistribution").onclick = ()=>{
@@ -377,7 +400,7 @@ async function initDistribution(birdId){
   }, true);
   document.getElementById("distHint").textContent = `${b.nameCn} · 分布于 ${provs.length} 个省/区/市（颜色深浅=密度）`;
   const info = document.getElementById("distInfo");
-  info.innerHTML = `<div class="dist-summary"><span class="dist-emoji">${b.emoji}</span>
+  info.innerHTML = `<div class="dist-summary">
     <strong>${b.nameCn}</strong> <em>${b.nameLatin}</em><br/>
     <span class="dist-provs">${provs.join(" · ")}</span></div>`;
 }
@@ -409,12 +432,12 @@ async function renderHistory(){
     return;
   }
   grid.innerHTML = filtered.map(r=>{
-    const b = birdById.get(r.birdId) || {nameCn:r.nameCn,emoji:"🐦"};
+    const b = birdById.get(r.birdId) || {nameCn:r.nameCn};
     const url = r.imgBlob ? URL.createObjectURL(r.imgBlob) : "";
     return `<div class="hist-card">
-      ${url?`<img src="${url}" alt="${b.nameCn}">`:`<div class="hist-emoji">${b.emoji||"🐦"}</div>`}
+      ${url?`<img src="${url}" alt="${b.nameCn}">`:`<div class="hist-emoji">🐦</div>`}
       <div class="hist-body">
-        <h4>${b.emoji||""} ${r.nameCn||b.nameCn}</h4>
+        <h4>${r.nameCn||b.nameCn}</h4>
         <div class="hist-meta">${r.observeDate||"日期未知"}</div>
         <button class="hist-add" data-id="${r.id}">加入图鉴</button>
       </div></div>`;
@@ -465,11 +488,11 @@ async function renderCollection(){
     return;
   }
   grid.innerHTML = filteredEntries.map(([key,recs])=>{
-    const b = birdById.get(+key) || {nameCn:recs[0].nameCn||"未知鸟种",emoji:"🐦",id:null};
+    const b = birdById.get(+key) || {nameCn:recs[0].nameCn||"未知鸟种",id:null};
     const firstUrl = recs[0].imgBlob ? URL.createObjectURL(recs[0].imgBlob) : "";
     return `<div class="card-box" data-bird="${b.id||''}" data-key="${key}">
       <div class="box-cover">
-        ${firstUrl?`<img src="${firstUrl}" alt="${b.nameCn}">`:`<div class="box-cover-emoji">${b.emoji||"🐦"}</div>`}
+        ${firstUrl?`<img src="${firstUrl}" alt="${b.nameCn}">`:`<div class="box-cover-emoji">🐦</div>`}
         <span class="box-badge">${recs.length}</span>
       </div>
       <div class="box-info">
@@ -493,15 +516,15 @@ function openCollectionBox(key){
   });
   if(!boxModalRecords.length) return;
   boxModalIndex = 0;
-  const b = birdById.get(+key) || {nameCn:boxModalRecords[0].nameCn,emoji:"🐦",id:null};
-  document.getElementById("boxTitle").textContent = `${b.emoji||""} ${b.nameCn}`;
+  const b = birdById.get(+key) || {nameCn:boxModalRecords[0].nameCn,id:null};
+  document.getElementById("boxTitle").textContent = b.nameCn;
   document.getElementById("boxModal").hidden = false;
   renderBoxCard();
 }
 let boxCardPrevUrl = null;
 function renderBoxCard(){
   const r = boxModalRecords[boxModalIndex];
-  const b = birdById.get(r.birdId) || {nameCn:r.nameCn,emoji:"🐦"};
+  const b = birdById.get(r.birdId) || {nameCn:r.nameCn};
   const url = r.imgBlob ? URL.createObjectURL(r.imgBlob) : "";
   const area = document.getElementById("boxCardArea");
   const card = area.querySelector(".box-card");
@@ -512,7 +535,7 @@ function renderBoxCard(){
       boxCardPrevUrl = url || null;
       area.innerHTML = `
         <div class="box-card" style="opacity:0">
-          ${url?`<img src="${url}" alt="${b.nameCn}">`:`<div class="box-card-emoji">${b.emoji||"🐦"}</div>`}
+          ${url?`<img src="${url}" alt="${b.nameCn}">`:`<div class="box-card-emoji">🐦</div>`}
           <div class="box-card-info">
             <div class="box-card-date">📅 ${r.observeDate||"日期未填"}</div>
             <div class="box-card-loc">📍 ${r.location||"地点未填"}</div>
@@ -528,7 +551,7 @@ function renderBoxCard(){
     boxCardPrevUrl = url || null;
     area.innerHTML = `
       <div class="box-card">
-        ${url?`<img src="${url}" alt="${b.nameCn}">`:`<div class="box-card-emoji">${b.emoji||"🐦"}</div>`}
+        ${url?`<img src="${url}" alt="${b.nameCn}">`:`<div class="box-card-emoji">🐦</div>`}
         <div class="box-card-info">
           <div class="box-card-date">📅 ${r.observeDate||"日期未填"}</div>
           <div class="box-card-loc">📍 ${r.location||"地点未填"}</div>
@@ -548,7 +571,7 @@ async function renderAiBirdGuide(){
     const files = si[b.nameCn] || [];
     const img = files[0] ? `data/sample/${encodeURIComponent(b.nameCn)}/${files[0]}` : null;
     return `<div class="ai-bird-card" data-id="${b.id}">
-      ${img?`<img src="${img}" alt="${b.nameCn}" loading="lazy">`:`<div class="ai-bird-emoji">${b.emoji}</div>`}
+      ${img?`<img src="${img}" alt="${b.nameCn}" loading="lazy">`:`<div class="ai-bird-emoji">🐦</div>`}
       <div class="ai-bird-body">
         <h4>${b.nameCn}</h4>
         <p class="ai-bird-latin">${b.nameLatin}</p>
@@ -566,7 +589,7 @@ async function openAiBirdBox(birdId){
   if(!b) return;
   const si = await loadSampleImages();
   const files = si[b.nameCn] || [];
-  document.getElementById("aiBoxTitle").textContent = `${b.emoji} ${b.nameCn}`;
+  document.getElementById("aiBoxTitle").textContent = b.nameCn;
   const photoHtml = files.length ? `<div class="ai-box-photos">${
     files.map(f=>`<img src="data/sample/${encodeURIComponent(b.nameCn)}/${f}" alt="${b.nameCn}" loading="lazy">`).join("")
   }</div>` : "";
@@ -646,7 +669,7 @@ function downloadBlob(content, filename, type){
 
 function exportRecords(format){
   const collected = allRecords.filter(r=>!r.auto && !r.type);
-  if(!collected.length){alert("还没有可导出的记录");return;}
+  if(!collected.length){showToast("还没有可导出的记录");return;}
   const rows = collected.map(r=>{
     const b = birdById.get(r.birdId) || {nameCn:r.nameCn||"未知",nameLatin:""};
     return {
@@ -782,7 +805,7 @@ function bindEvents(){
   };
 
   document.getElementById("saveToCollection").onclick = ()=>{
-    if(!currentRecognition){alert("请先识别一只鸟");return;}
+    if(!currentRecognition){showToast("请先识别一只鸟");return;}
     const b = currentRecognition.bird;
     document.getElementById("saveCollBird").value = b.nameCn;
     document.getElementById("saveCollDate").value = new Date().toISOString().slice(0,10);
@@ -794,7 +817,7 @@ function bindEvents(){
   document.getElementById("saveCollCancel").onclick = ()=>saveCollModal.hidden=true;
   saveCollModal.onclick = e=>{if(e.target===saveCollModal)saveCollModal.hidden=true;};
   document.getElementById("saveCollConfirm").onclick = async ()=>{
-    if(!currentRecognition){alert("请先识别一只鸟");return;}
+    if(!currentRecognition){showToast("请先识别一只鸟");return;}
     await dbAdd({
       birdId:currentRecognition.bird.id,
       nameCn:currentRecognition.bird.nameCn,
@@ -804,7 +827,7 @@ function bindEvents(){
       note:document.getElementById("saveCollNote").value.trim()
     });
     saveCollModal.hidden = true;
-    alert("已加入图鉴 🎉");
+    showToast("已加入图鉴 🎉");
   };
 
   const editDescModal = document.getElementById("editDescModal");
@@ -842,19 +865,22 @@ function bindEvents(){
     boxModal.hidden = true;
     editDescModal.hidden = false;
   };
-  document.getElementById("boxDelete").onclick = async ()=>{
+  document.getElementById("boxDelete").onclick = ()=>{
     const r = boxModalRecords[boxModalIndex];
     if(!r) return;
-    await dbDel(r.id);
-    boxModalRecords.splice(boxModalIndex,1);
-    if(!boxModalRecords.length){
-      boxModal.hidden = true;
+    showConfirm("确定要删除这条图鉴记录吗？", async ()=>{
+      await dbDel(r.id);
+      boxModalRecords.splice(boxModalIndex,1);
+      if(!boxModalRecords.length){
+        boxModal.hidden = true;
+        await renderCollection();
+        return;
+      }
+      if(boxModalIndex>=boxModalRecords.length) boxModalIndex = boxModalRecords.length-1;
+      renderBoxCard();
       await renderCollection();
-      return;
-    }
-    if(boxModalIndex>=boxModalRecords.length) boxModalIndex = boxModalRecords.length-1;
-    renderBoxCard();
-    await renderCollection();
+      showToast("已删除");
+    });
   };
   document.getElementById("boxDist").onclick = ()=>{
     const r = boxModalRecords[boxModalIndex];
@@ -879,7 +905,7 @@ function bindEvents(){
   document.getElementById("errSubmit").onclick = async ()=>{
     const correct = document.getElementById("errCorrectBird").value.trim();
     const desc = document.getElementById("errDesc").value.trim();
-    if(!desc){alert("请描述识别错误的情况");return;}
+    if(!desc){showToast("请描述识别错误的情况");return;}
     await dbAdd({
       type:"errorReport",
       birdId: currentRecognition?.bird?.id || null,
@@ -892,7 +918,7 @@ function bindEvents(){
     errorModal.hidden = true;
     document.getElementById("errCorrectBird").value = "";
     document.getElementById("errDesc").value = "";
-    alert("感谢反馈！报告已记录 ✅");
+    showToast("感谢反馈！报告已记录 ✅");
   };
 
   document.querySelectorAll(".guide-tab").forEach(t=>t.onclick=()=>renderGuide(t.dataset.tab));

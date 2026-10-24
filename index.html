@@ -161,8 +161,8 @@
       <div class="collection-bar">
         <input type="text" id="collSearch" class="search-input" placeholder="🔍 搜索鸟名…" />
         <button class="btn btn-primary" id="addRecordBtn">＋ 手动添加</button>
-        <button class="btn btn-ghost" id="exportCsvBtn">导出 CSV</button>
-        <button class="btn btn-ghost" id="exportJsonBtn">导出 JSON</button>
+        <button class="btn btn-ghost" id="exportCsvBtn" title="将已收集的图鉴导出为CSV文件，可用Excel打开">导出 CSV</button>
+        <button class="btn btn-ghost" id="exportJsonBtn" title="将已收集的图鉴导出为JSON文件，适合程序导入">导出 JSON</button>
       </div>
       <div id="collectionGrid" class="collection-grid"></div>
     </div>
@@ -274,6 +274,18 @@
       <div class="modal-actions">
         <button class="btn btn-ghost" id="cropSkip">直接识别</button>
         <button class="btn btn-primary" id="cropConfirm">裁剪并识别</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 确认弹窗 -->
+  <div class="modal" id="confirmModal" hidden>
+    <div class="modal-box" style="width:min(380px,92vw)">
+      <h3>确认操作</h3>
+      <p id="confirmMsg" style="color:var(--ink);margin-bottom:20px;line-height:1.6"></p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="confirmNo">取消</button>
+        <button class="btn btn-primary" id="confirmYes">确认</button>
       </div>
     </div>
   </div>

@@ -11,6 +11,10 @@
   --shadow:0 4px 18px rgba(74,124,89,.12);
   --radius:14px;
 }
+
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--green-dark);color:#fff;padding:12px 28px;border-radius:24px;font-size:15px;font-weight:600;box-shadow:0 6px 20px rgba(53,94,59,.3);z-index:3000;opacity:0;transition:all .3s ease;pointer-events:none;max-width:90vw;text-align:center}
+.toast-show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast-error{background:#c0392b;box-shadow:0 6px 20px rgba(192,57,43,.3)}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
