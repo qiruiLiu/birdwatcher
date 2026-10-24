@@ -150,7 +150,7 @@ let sampleImages = null;
 async function loadSampleImages(){
   if(sampleImages) return sampleImages;
   try{
-    const resp = await fetch("sample_images.json?v=resnet18");
+    const resp = await fetch("sample_images.json?v=quant");
     sampleImages = await resp.json();
   }catch(e){ sampleImages = {}; }
   return sampleImages;
@@ -240,7 +240,7 @@ async function realRecognize(blob){
     const badge = document.getElementById("resultBadge");
     if(badge) badge.textContent = "正在加载AI模型…";
     ort.env.wasm.wasmPaths = "./";
-    const modelResp = await fetch("bird_model.onnx?v=resnet18");
+    const modelResp = await fetch("bird_model.onnx?v=quant");
     const total = +modelResp.headers.get("Content-Length") || 44731440;
     const reader = modelResp.body.getReader();
     let loaded = 0;
@@ -258,7 +258,7 @@ async function realRecognize(blob){
     for(const c of chunks){ buffer.set(c, offset); offset += c.length; }
     if(badge) badge.textContent = "正在初始化模型…";
     ortSession = await ort.InferenceSession.create(buffer);
-    const resp = await fetch('classes.json?v=resnet18');
+    const resp = await fetch('classes.json?v=quant');
     const cls = await resp.json();
     ortLabelMap = cls.map(name => BIRDS.findIndex(b => b.nameCn === name));
     ortReady = true;
