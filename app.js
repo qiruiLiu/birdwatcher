@@ -281,8 +281,12 @@ async function realRecognize(blob){
   const tensor = new ort.Tensor("float32", arr, [1,3,224,224]);
   const out = await ortSession.run({ [ortSession.inputNames[0]]: tensor });
   const logits = out[ortSession.outputNames[0]].data;
-  const idx = [...logits].map((v,i)=>[v,i]).sort((a,b)=>b[0]-a[0]).slice(0,3);
-  return idx.map(([v,i])=>({ bird: BIRDS[ortLabelMap[i]], prob: 1/(1+Math.exp(-v)) }));
+  const maxLogit = Math.max(...logits);
+  const expLogits = [...logits].map(v=>Math.exp(v-maxLogit));
+  const sumExp = expLogits.reduce((a,b)=>a+b,0);
+  const probs = expLogits.map(e=>e/sumExp);
+  const idx = probs.map((p,i)=>[p,i]).sort((a,b)=>b[0]-a[0]).slice(0,3);
+  return idx.map(([p,i])=>({ bird: BIRDS[ortLabelMap[i]], prob: p }));
 }
 
 let currentRecognition = null;
@@ -313,15 +317,23 @@ async function handleFile(file){
 
 function showResult(cands, blob){
   const top = cands[0];
-  currentRecognition = {bird:top.bird, blob};
   const b = top.bird;
   const pct = (top.prob*100).toFixed(0);
   const badge = document.getElementById("resultBadge");
-  if(top.prob < 0.4){
-    badge.textContent = `⚠️ 未能识别（${pct}%）`;
+  if(top.prob < 0.15){
+    badge.textContent = `⚠️ 未能识别为鸟类（${pct}%）`;
     badge.style.background = "#fdecea";
     badge.style.color = "#c0392b";
-  }else if(top.prob < 0.6){
+    document.getElementById("resultName").textContent = "非鸟类图片";
+    document.getElementById("resultLatin").textContent = "";
+    document.getElementById("resultProtect").textContent = "";
+    document.getElementById("resultDiet").textContent = "—";
+    document.getElementById("resultHabit").textContent = "—";
+    document.getElementById("resultBreeding").textContent = "—";
+    document.getElementById("resultCandidates").innerHTML = "模型未识别到鸟类特征，请上传鸟类图片";
+    currentRecognition = null;
+    return;
+  }else if(top.prob < 0.30){
     badge.textContent = `⚠️ 不太确定 ${pct}%，建议人工核对`;
     badge.style.background = "#fff4e6";
     badge.style.color = "#e67e22";
@@ -330,6 +342,7 @@ function showResult(cands, blob){
     badge.style.background = "";
     badge.style.color = "";
   }
+  currentRecognition = {bird:b, blob};
   document.getElementById("resultName").textContent = b.nameCn;
   document.getElementById("resultLatin").textContent = b.nameLatin;
   document.getElementById("resultProtect").textContent = b.protect;
