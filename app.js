@@ -206,7 +206,7 @@ async function realRecognize(blob){
   if(!ortReady){
     const badge = document.getElementById("resultBadge");
     if(badge) badge.textContent = "正在加载AI模型…";
-    ort.env.wasm.wasmPaths = "./";
+    ort.env.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.1/dist/";
     const modelResp = await fetch("bird_model.onnx?v=resnet18");
     const total = +modelResp.headers.get("Content-Length") || 44731440;
     const reader = modelResp.body.getReader();

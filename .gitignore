@@ -8,3 +8,4 @@ export_onnx.py
 bird_provinces_auto.json
 bird_best.pth
 bird_best_backup_*.pthdata/thumb/
+ort-wasm*.wasm
