@@ -54,6 +54,16 @@ const BIRDS = [
 
 const birdById = new Map(BIRDS.map(b=>[b.id,b]));
 
+const BIRD_GROUPS = {
+  "水鸟湿地": [18,19,5,14,20,21,22,23,24,25,26,16,17,50],
+  "猛禽": [27,28],
+  "攀禽": [4,33,6,29,30,34,15],
+  "鸦鸠": [3,31,8,7,32,13],
+  "鸣禽": [1,35,9,11,36,37,12,38,39,40,10,41,42,43,44,45,2,46,47,48,49],
+};
+const birdToGroup = {};
+Object.entries(BIRD_GROUPS).forEach(([g,ids])=>ids.forEach(id=>birdToGroup[id]=g));
+
 const ALL_PROV = ["北京","天津","上海","重庆","河北","山西","辽宁","吉林","黑龙江","江苏","浙江","安徽","福建","江西","山东","河南","湖北","湖南","广东","广西","海南","四川","贵州","云南","西藏","陕西","甘肃","青海","内蒙古","宁夏","新疆","香港","澳门","台湾"];
 const PROV_FULL = {"北京":"北京市","天津":"天津市","上海":"上海市","重庆":"重庆市","河北":"河北省","山西":"山西省","辽宁":"辽宁省","吉林":"吉林省","黑龙江":"黑龙江省","江苏":"江苏省","浙江":"浙江省","安徽":"安徽省","福建":"福建省","江西":"江西省","山东":"山东省","河南":"河南省","湖北":"湖北省","湖南":"湖南省","广东":"广东省","广西":"广西壮族自治区","海南":"海南省","四川":"四川省","贵州":"贵州省","云南":"云南省","西藏":"西藏自治区","陕西":"陕西省","甘肃":"甘肃省","青海":"青海省","内蒙古":"内蒙古自治区","宁夏":"宁夏回族自治区","新疆":"新疆维吾尔自治区","香港":"香港特别行政区","澳门":"澳门特别行政区","台湾":"台湾省"};
 const SOUTH = ["广东","广西","福建","江西","湖南","浙江","江苏","上海","安徽","湖北","海南","香港","澳门","台湾"];
@@ -472,6 +482,7 @@ async function renderCollection(){
     return;
   }
   const searchTerm = (document.getElementById("collSearch").value||"").trim().toLowerCase();
+  const groupFilter = document.getElementById("collGroup").value;
   const groups = {};
   collected.forEach(r=>{
     const key = r.birdId || ("_"+r.nameCn);
@@ -479,9 +490,10 @@ async function renderCollection(){
     groups[key].push(r);
   });
   const filteredEntries = Object.entries(groups).filter(([key,recs])=>{
-    if(!searchTerm) return true;
     const b = birdById.get(+key) || {nameCn:recs[0].nameCn||""};
-    return (b.nameCn||"").toLowerCase().includes(searchTerm);
+    if(groupFilter && birdToGroup[+key] !== groupFilter) return false;
+    if(searchTerm && !(b.nameCn||"").toLowerCase().includes(searchTerm)) return false;
+    return true;
   });
   if(!filteredEntries.length){
     grid.innerHTML = `<div class="empty-tip">未找到匹配"${searchTerm}"的图鉴</div>`;
@@ -567,7 +579,18 @@ function renderBoxCard(){
 async function renderAiBirdGuide(){
   const grid = document.getElementById("aiBirdGrid");
   const si = await loadSampleImages();
-  grid.innerHTML = BIRDS.map(b=>{
+  const searchTerm = (document.getElementById("aiBirdSearch").value||"").trim().toLowerCase();
+  const groupFilter = document.getElementById("aiBirdGroup").value;
+  const filtered = BIRDS.filter(b=>{
+    if(groupFilter && birdToGroup[b.id] !== groupFilter) return false;
+    if(searchTerm && !b.nameCn.toLowerCase().includes(searchTerm) && !b.nameLatin.toLowerCase().includes(searchTerm)) return false;
+    return true;
+  });
+  if(!filtered.length){
+    grid.innerHTML = `<div class="empty-tip">未找到匹配的鸟种</div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(b=>{
     const files = si[b.nameCn] || [];
     const img = files[0] ? `data/sample/${encodeURIComponent(b.nameCn)}/${files[0]}` : null;
     return `<div class="ai-bird-card" data-id="${b.id}">
@@ -694,9 +717,31 @@ function bindEvents(){
   const navToggle = document.getElementById("navToggle");
   navToggle.onclick = ()=>document.querySelector(".nav").classList.toggle("open");
 
+  const groupSel = document.querySelectorAll("#aiBirdGroup, #collGroup");
+  groupSel.forEach(sel=>{
+    Object.keys(BIRD_GROUPS).forEach(g=>{
+      const o=document.createElement("option");o.value=g;o.textContent=g;sel.appendChild(o);
+    });
+  });
+
   document.getElementById("collSearch").addEventListener("input",()=>renderCollection());
+  document.getElementById("collGroup").addEventListener("change",()=>renderCollection());
+  document.getElementById("aiBirdSearch").addEventListener("input",()=>renderAiBirdGuide());
+  document.getElementById("aiBirdGroup").addEventListener("change",()=>renderAiBirdGuide());
   document.getElementById("historySearch").addEventListener("input",()=>renderHistory());
   document.getElementById("historySort").addEventListener("change",()=>renderHistory());
+
+  const distSearch = document.getElementById("distBirdSearch");
+  const distSelect = document.getElementById("distBirdSelect");
+  distSearch.addEventListener("input",()=>{
+    const term = distSearch.value.trim().toLowerCase();
+    const cur = distSelect.value;
+    distSelect.innerHTML = "";
+    BIRDS.filter(b=>!term || b.nameCn.toLowerCase().includes(term) || b.nameLatin.toLowerCase().includes(term)).forEach(b=>{
+      const o=document.createElement("option");o.value=b.id;o.textContent=b.nameCn;distSelect.appendChild(o);
+    });
+    if([...distSelect.options].some(o=>o.value===cur)) distSelect.value=cur;
+  });
 
   document.querySelectorAll(".feature-card").forEach(card=>{
     const labelEl = card.querySelector(".feature-label");
@@ -759,38 +804,51 @@ function bindEvents(){
     reader.readAsDataURL(file);
     cropModal._file = file;
   }
-  cropBox.addEventListener("mousedown",e=>{
+  function getCropPoint(e){
+    if(e.touches && e.touches.length) return {x:e.touches[0].clientX, y:e.touches[0].clientY};
+    return {x:e.clientX, y:e.clientY};
+  }
+  function onCropStart(e){
     e.preventDefault();
+    const p = getCropPoint(e);
     const rect = cropBox.getBoundingClientRect();
     const cornerX = rect.left+rect.width, cornerY = rect.top+rect.height;
-    if(Math.abs(e.clientX-cornerX)<12 && Math.abs(e.clientY-cornerY)<12){
+    if(Math.abs(p.x-cornerX)<16 && Math.abs(p.y-cornerY)<16){
       cropResizing = true;
     }else{
       cropDragging = true;
-      cropOffsetX = e.clientX-rect.left;
-      cropOffsetY = e.clientY-rect.top;
+      cropOffsetX = p.x-rect.left;
+      cropOffsetY = p.y-rect.top;
     }
-  });
-  document.addEventListener("mousemove",e=>{
+  }
+  function onCropMove(e){
     if(!cropDragging && !cropResizing) return;
+    e.preventDefault();
+    const p = getCropPoint(e);
     const containerRect = cropContainer.getBoundingClientRect();
     if(cropDragging){
-      let x = e.clientX-containerRect.left-cropOffsetX;
-      let y = e.clientY-containerRect.top-cropOffsetY;
+      let x = p.x-containerRect.left-cropOffsetX;
+      let y = p.y-containerRect.top-cropOffsetY;
       x = Math.max(0, Math.min(x, containerRect.width-cropBox.offsetWidth));
       y = Math.max(0, Math.min(y, containerRect.height-cropBox.offsetHeight));
       cropBox.style.left = x+"px";
       cropBox.style.top = y+"px";
     }else if(cropResizing){
-      let w = e.clientX-cropBox.getBoundingClientRect().left;
-      let h = e.clientY-cropBox.getBoundingClientRect().top;
+      let w = p.x-cropBox.getBoundingClientRect().left;
+      let h = p.y-cropBox.getBoundingClientRect().top;
       w = Math.max(50, Math.min(w, containerRect.right-cropBox.getBoundingClientRect().left));
       h = Math.max(50, Math.min(h, containerRect.bottom-cropBox.getBoundingClientRect().top));
       cropBox.style.width = w+"px";
       cropBox.style.height = h+"px";
     }
-  });
-  document.addEventListener("mouseup",()=>{cropDragging=false;cropResizing=false;});
+  }
+  function onCropEnd(){cropDragging=false;cropResizing=false;}
+  cropBox.addEventListener("mousedown",onCropStart);
+  cropBox.addEventListener("touchstart",onCropStart,{passive:false});
+  document.addEventListener("mousemove",onCropMove);
+  document.addEventListener("touchmove",onCropMove,{passive:false});
+  document.addEventListener("mouseup",onCropEnd);
+  document.addEventListener("touchend",onCropEnd);
   document.getElementById("cropSkip").onclick = ()=>{cropModal.hidden=true;handleFile(cropModal._file);};
   cropModal.onclick = e=>{if(e.target===cropModal)cropModal.hidden=true;};
   document.getElementById("cropConfirm").onclick = ()=>{

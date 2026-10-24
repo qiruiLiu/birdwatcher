@@ -143,10 +143,9 @@ var _hmt = _hmt || [];
   <!-- 分布地图（ECharts 中国分布） -->
   <section id="page-map" class="page">
     <h2 class="page-title">鸟种中国分布</h2>
-    <div class="dist-controls">
-      <label>选择鸟种
-        <select id="distBirdSelect"></select>
-      </label>
+    <div class="dist-controls search-bar">
+      <input type="text" id="distBirdSearch" class="search-input" placeholder="🔍 搜索鸟名…" style="flex:1;min-width:160px" />
+      <select id="distBirdSelect"></select>
       <span id="distHint" class="map-hint"></span>
     </div>
     <div id="echartsMap" class="echarts-map"></div>
@@ -164,11 +163,16 @@ var _hmt = _hmt || [];
       <div class="collection-bar">
         <div class="achievements" id="achievements"></div>
       </div>
+      <div class="search-bar">
+        <input type="text" id="aiBirdSearch" class="search-input" placeholder="🔍 搜索鸟名…" />
+        <select id="aiBirdGroup" class="sort-select"><option value="">全部类群</option></select>
+      </div>
       <div id="aiBirdGrid" class="collection-grid"></div>
     </div>
     <div id="collTabCollected" class="coll-tab-content" hidden>
       <div class="collection-bar">
         <input type="text" id="collSearch" class="search-input" placeholder="🔍 搜索鸟名…" />
+        <select id="collGroup" class="sort-select"><option value="">全部类群</option></select>
         <button class="btn btn-primary" id="addRecordBtn">＋ 手动添加</button>
         <button class="btn btn-ghost" id="exportCsvBtn" title="将已收集的图鉴导出为CSV文件，可用Excel打开">导出 CSV</button>
         <button class="btn btn-ghost" id="exportJsonBtn" title="将已收集的图鉴导出为JSON文件，适合程序导入">导出 JSON</button>
