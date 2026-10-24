@@ -1,9 +1,10 @@
-const CACHE_NAME = "birdwatcher-v1";
+const CACHE_NAME = "birdwatcher-v2";
 const CORE_FILES = [
   "./",
   "index.html",
   "app.js",
   "style.css",
+  "ort.min.js",
   "echarts.min.js",
   "china_geo.json",
   "sample_images.json",
@@ -29,13 +30,11 @@ self.addEventListener("activate", e=>{
 
 self.addEventListener("fetch", e=>{
   const url = new URL(e.request.url);
-  if(url.origin !== location.origin) return;
   if(e.request.method !== "GET") return;
-  if(url.pathname.endsWith(".onnx") || url.pathname.endsWith(".wasm")) return;
   e.respondWith(
     caches.match(e.request).then(cached=>{
       const fetchPromise = fetch(e.request).then(resp=>{
-        if(resp.ok){
+        if(resp.ok && resp.type !== "opaque"){
           const clone = resp.clone();
           caches.open(CACHE_NAME).then(c=>c.put(e.request, clone));
         }
