@@ -285,8 +285,9 @@ async function realRecognize(blob){
   const expLogits = [...logits].map(v=>Math.exp(v-maxLogit));
   const sumExp = expLogits.reduce((a,b)=>a+b,0);
   const probs = expLogits.map(e=>e/sumExp);
+  const entropy = -probs.reduce((h,p)=>h + (p>0 ? p*Math.log(p) : 0), 0) / Math.log(probs.length);
   const idx = probs.map((p,i)=>[p,i]).sort((a,b)=>b[0]-a[0]).slice(0,3);
-  return idx.map(([p,i])=>({ bird: BIRDS[ortLabelMap[i]], prob: p }));
+  return { cands: idx.map(([p,i])=>({ bird: BIRDS[ortLabelMap[i]], prob: p })), entropy };
 }
 
 let currentRecognition = null;
@@ -299,28 +300,31 @@ async function handleFile(file){
     const blob = await compressImage(file);
     const url = URL.createObjectURL(blob);
     document.getElementById("resultImg").src = url;
-    let cands;
+    let cands, entropy = 0;
     try{
-      cands = await realRecognize(blob);
+      const result = await realRecognize(blob);
+      cands = result.cands; entropy =(result.entropy;
     }catch(e){
       console.warn("ONNX 模型不可用，降级模拟识别:", e);
       document.getElementById("resultBadge").textContent = "⚠️ AI模型加载失败，使用模拟识别";
       const rgb = await avgColor(blob);
       cands = mockRecognize(rgb);
     }
-    showResult(cands, blob);
+    showResult(cands, blob, entropy);
   }catch(err){
     document.getElementById("resultBadge").textContent = "识别失败";
     showToast(err);
   }
 }
 
-function showResult(cands, blob){
+function showResult(cands, blob, entropy){
   const top = cands[0];
   const b = top.bird;
   const pct = (top.prob*100).toFixed(0);
   const badge = document.getElementById("resultBadge");
-  if(top.prob < 0.15){
+  const isNonBird = top.prob < 0.20 || entropy > 0.75;
+  const isUncertain = !isNonBird && (top.prob < 0.35 || entropy > 0.55);
+  if(isNonBird){
     badge.textContent = `⚠️ 未能识别为鸟类（${pct}%）`;
     badge.style.background = "#fdecea";
     badge.style.color = "#c0392b";
@@ -333,7 +337,7 @@ function showResult(cands, blob){
     document.getElementById("resultCandidates").innerHTML = "模型未识别到鸟类特征，请上传鸟类图片";
     currentRecognition = null;
     return;
-  }else if(top.prob < 0.30){
+  }else if(isUncertain){
     badge.textContent = `⚠️ 不太确定 ${pct}%，建议人工核对`;
     badge.style.background = "#fff4e6";
     badge.style.color = "#e67e22";
