@@ -371,12 +371,44 @@ function mockRecognize(rgb){
   })).map((x,i,arr)=>({...x, prob: i===0?Math.min(0.95,x.prob+0.1):x.prob}));
 }
 
-let ortSession = null, ortReady = false, ortLabelMap = null;
-async function realRecognize(blob){
-  if(!ortReady){
-    const badge = document.getElementById("resultBadge");
+let ortSession = null, ortReady = false, ortLoading = false, ortLabelMap = null;
+const MODEL_CACHE_DB = "birdwatcher_cache", MODEL_CACHE_KEY = "bird_model_v52";
+function openCacheDB(){
+  return new Promise((res,rej)=>{
+    const req = indexedDB.open(MODEL_CACHE_DB, 1);
+    req.onupgradeneeded = ()=>{ req.result.createObjectStore("models"); };
+    req.onsuccess = ()=>res(req.result);
+    req.onerror = ()=>rej(req.error);
+  });
+}
+async function getCachedModel(){
+  try{
+    const db = await openCacheDB();
+    return await new Promise((res,rej)=>{
+      const tx = db.transaction("models","readonly").objectStore("models").get(MODEL_CACHE_KEY);
+      tx.onsuccess = ()=>res(tx.result || null);
+      tx.onerror = ()=>rej(tx.error);
+    });
+  }catch{ return null; }
+}
+async function setCachedModel(buffer){
+  try{
+    const db = await openCacheDB();
+    db.transaction("models","readwrite").objectStore("models").put(buffer, MODEL_CACHE_KEY);
+  }catch{}
+}
+async function ensureModelReady(badge){
+  if(ortReady) return;
+  if(ortLoading){ while(ortLoading) await new Promise(r=>setTimeout(r,100)); return; }
+  ortLoading = true;
+  ort.env.wasm.wasmPaths = "./";
+  let buffer;
+  const cached = await getCachedModel();
+  if(cached){
+    buffer = cached;
+    if(badge) badge.textContent = "正在初始化模型（缓存）…";
+  }else{
     if(badge) badge.textContent = "正在加载AI模型…";
-    ort.env.wasm.wasmPaths = "./";
     const modelResp = await fetch("bird_model.onnx?v=v52");
     const total = +modelResp.headers.get("Content-Length") || 22409028;
     const reader = modelResp.body.getReader();
@@ -390,15 +422,26 @@ async function realRecognize(blob){
       const pct = Math.min(99, Math.round(loaded/total*100));
       if(badge) badge.textContent = `正在加载AI模型…${pct}%`;
     }
-    const buffer = new Uint8Array(loaded);
+    buffer = new Uint8Array(loaded);
     let offset = 0;
     for(const c of chunks){ buffer.set(c, offset); offset += c.length; }
-    if(badge) badge.textContent = "正在初始化模型…";
-    ortSession = await ort.InferenceSession.create(buffer);
-    const resp = await fetch('classes.json?v=v52');
-    const cls = await resp.json();
-    ortLabelMap = cls.map(name => BIRDS.findIndex(b => b.nameCn === name));
-    ortReady = true;
+    setCachedModel(buffer);
+  }
+  if(badge) badge.textContent = "正在初始化模型…";
+  ortSession = await ort.InferenceSession.create(buffer, {
+    executionProviders: ["wasm"],
+    graphOptimizationLevel: "all"
+  });
+  const resp = await fetch('classes.json?v=v52');
+  const cls = await resp.json();
+  ortLabelMap = cls.map(name => BIRDS.findIndex(b => b.nameCn === name));
+  ortReady = true;
+  ortLoading = false;
+}
+async function realRecognize(blob){
+  if(!ortReady){
+    const badge = document.getElementById("resultBadge");
+    await ensureModelReady(badge);
   }
   const bmp = await createImageBitmap(blob);
   const c = document.createElement("canvas"); c.width=224; c.height=224;
@@ -1383,3 +1426,6 @@ router();
     }
   });
 })();
+window.addEventListener("load", ()=>{
+  setTimeout(()=>{ if(!ortReady && !ortLoading) ensureModelReady(null); }, 2000);
+});
