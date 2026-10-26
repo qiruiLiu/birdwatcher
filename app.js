@@ -399,44 +399,44 @@ async function setCachedModel(buffer){
 }
 async function ensureModelReady(badge){
   if(ortReady) return;
-  if(ortLoading){ while(ortLoading) await new Promise(r=>setTimeout(r,100)); return; }
+  if(ortLoading){ while(ortLoading && !ortReady) await new Promise(r=>setTimeout(r,100)); return; }
   ortLoading = true;
-  ort.env.wasm.wasmPaths = "./";
-  let buffer;
-  const cached = await getCachedModel();
-  if(cached){
-    buffer = cached;
-    if(badge) badge.textContent = "正在初始化模型（缓存）…";
-  }else{
-    if(badge) badge.textContent = "正在加载AI模型…";
-    const modelResp = await fetch("bird_model.onnx?v=v52");
-    const total = +modelResp.headers.get("Content-Length") || 22409028;
-    const reader = modelResp.body.getReader();
-    let loaded = 0;
-    const chunks = [];
-    while(true){
-      const {done, value} = await reader.read();
-      if(done) break;
-      chunks.push(value);
-      loaded += value.length;
-      const pct = Math.min(99, Math.round(loaded/total*100));
-      if(badge) badge.textContent = `正在加载AI模型…${pct}%`;
+  try{
+    ort.env.wasm.wasmPaths = "./";
+    let buffer;
+    const cached = await getCachedModel();
+    if(cached){
+      buffer = cached;
+      if(badge) badge.textContent = "正在初始化模型（缓存）…";
+    }else{
+      if(badge) badge.textContent = "正在加载AI模型…";
+      const modelResp = await fetch("bird_model.onnx?v=v52");
+      const total = +modelResp.headers.get("Content-Length") || 22409028;
+      const reader = modelResp.body.getReader();
+      let loaded = 0;
+      const chunks = [];
+      while(true){
+        const {done, value} = await reader.read();
+        if(done) break;
+        chunks.push(value);
+        loaded += value.length;
+        const pct = Math.min(99, Math.round(loaded/total*100));
+        if(badge) badge.textContent = `正在加载AI模型…${pct}%`;
+      }
+      buffer = new Uint8Array(loaded);
+      let offset = 0;
+      for(const c of chunks){ buffer.set(c, offset); offset += c.length; }
+      setCachedModel(buffer);
     }
-    buffer = new Uint8Array(loaded);
-    let offset = 0;
-    for(const c of chunks){ buffer.set(c, offset); offset += c.length; }
-    setCachedModel(buffer);
+    if(badge) badge.textContent = "正在初始化模型…";
+    ortSession = await ort.InferenceSession.create(buffer);
+    const resp = await fetch('classes.json?v=v52');
+    const cls = await resp.json();
+    ortLabelMap = cls.map(name => BIRDS.findIndex(b => b.nameCn === name));
+    ortReady = true;
+  }finally{
+    ortLoading = false;
   }
-  if(badge) badge.textContent = "正在初始化模型…";
-  ortSession = await ort.InferenceSession.create(buffer, {
-    executionProviders: ["wasm"],
-    graphOptimizationLevel: "all"
-  });
-  const resp = await fetch('classes.json?v=v52');
-  const cls = await resp.json();
-  ortLabelMap = cls.map(name => BIRDS.findIndex(b => b.nameCn === name));
-  ortReady = true;
-  ortLoading = false;
 }
 async function realRecognize(blob){
   if(!ortReady){
