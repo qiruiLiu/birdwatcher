@@ -825,12 +825,8 @@ const GUIDE = {
     <li><strong>不投喂</strong>：人工投喂改变鸟类觅食习性，危害其生存。</li>
     <li><strong>不公开敏感地点</strong>：珍稀鸟种繁殖地不公开坐标，防盗猎。</li>
     <li><strong>尊重他人</strong>：观鸟时低声交流，分享发现时照顾后来者。</li></ul>`,
-  hotspot:`<h3>📍 国内热门观鸟点</h3>
-    <div class="hotspot-item"><h4>鄱阳湖湿地（江西）</h4><div class="hs-meta">最佳：11月—次年3月 · 代表种：白鹤、东方白鹳、白鹭</div></div>
-    <div class="hotspot-item"><h4>西溪湿地（杭州）</h4><div class="hs-meta">最佳：4—5月、9—10月 · 代表种：普通翠鸟、白鹭、黑水鸡</div></div>
-    <div class="hotspot-item"><h4>成都浣花溪公园</h4><div class="hs-meta">最佳：全年 · 代表种：白头鹎、红嘴蓝鹊、珠颈斑鸠</div></div>
-    <div class="hotspot-item"><h4>深圳湾公园</h4><div class="hs-meta">最佳：10月—次年4月 · 代表种：黑脸琵鹭、棕背伯劳、鸻鹬类</div></div>
-    <div class="hotspot-item"><h4>北京奥森公园</h4><div class="hs-meta">最佳：春秋迁徙季 · 代表种：喜鹊、灰喜鹊、红喉歌鸲</div></div>`,
+  hotspot:`<h3>📍 国内热门观鸟点</h3><p style="color:var(--muted);margin-bottom:16px">点击地图上的标记查看观鸟点详情</p>
+    <div class="hotspot-wrap"><div id="hotspotMap" class="hotspot-map"></div><div id="hotspotInfo" class="hotspot-info"></div></div>`,
   mistake:`<h3>❌ 常见识别误区</h3><ul>
     <li><strong>只看颜色</strong>：颜色受光线影响大，需结合体型、嘴形、行为综合判断。</li>
     <li><strong>忽略生境</strong>：同色系鸟种生境差异大，水边白鹭与林中白鸽不会混淆。</li>
@@ -841,6 +837,95 @@ const GUIDE = {
 function renderGuide(tab){
   document.querySelectorAll(".guide-tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===tab));
   document.getElementById("guideContent").innerHTML = GUIDE[tab];
+  if(tab === "hotspot") initHotspotMap();
+}
+
+const HOTSPOTS = [
+  {name:"鄱阳湖湿地",region:"江西",coord:[115.89,28.68],bird:"白鹭",bestTime:"11月—次年3月",species:"白鹤、东方白鹳、白鹭",desc:"中国最大淡水湖，冬季候鸟天堂，数十万只水鸟越冬"},
+  {name:"西溪湿地",region:"杭州",coord:[120.15,30.27],bird:"普通翠鸟",bestTime:"4—5月、9—10月",species:"普通翠鸟、白鹭、黑水鸡",desc:"城市湿地典范，四季可观，春秋迁徙季鸟种最丰富"},
+  {name:"成都浣花溪公园",region:"四川",coord:[104.07,30.57],bird:"白头鹎",bestTime:"全年",species:"白头鹎、红嘴蓝鹊、珠颈斑鸠",desc:"市区公园观鸟首选，常见留鸟丰富，适合入门练习"},
+  {name:"深圳湾公园",region:"广东",coord:[113.58,22.27],bird:"棕背伯劳",bestTime:"10月—次年4月",species:"黑脸琵鹭、棕背伯劳、鸻鹬类",desc:"候鸟迁徙通道，冬季可见大量水鸟和珍稀黑脸琵鹭"},
+  {name:"北京奥森公园",region:"北京",coord:[116.40,39.90],bird:"喜鹊",bestTime:"春秋迁徙季",species:"喜鹊、灰喜鹊、红喉歌鸲",desc:"城市绿肺，春秋迁徙过境鸟种多，冬季可见留鸟"},
+  {name:"昆明滇池",region:"云南",coord:[102.83,24.88],bird:"红嘴鸥",bestTime:"11月—次年3月",species:"红嘴鸥、白鹭、苍鹭",desc:"红嘴鸥越冬胜地，数万只红嘴鸥冬季聚集"},
+  {name:"广州白云山",region:"广东",coord:[113.26,23.13],bird:"珠颈斑鸠",bestTime:"全年",species:"珠颈斑鸠、白头鹎、暗绿绣眼鸟",desc:"亚热带山林，留鸟种类丰富，全年适宜观鸟"},
+  {name:"上海世纪公园",region:"上海",coord:[121.47,31.23],bird:"白头鹎",bestTime:"春秋迁徙季",species:"白头鹎、乌鸫、大山雀",desc:"城市绿地观鸟点，迁徙季有过境鸟，冬季留鸟活跃"},
+  {name:"哈尔滨松花江",region:"黑龙江",coord:[126.63,45.75],bird:"凤头麦鸡",bestTime:"5—9月",species:"凤头麦鸡、苍鹭、鸳鸯",desc:"北方水域观鸟，夏季繁殖鸟丰富，可见特色寒温带鸟种"},
+  {name:"青岛海边",region:"山东",coord:[120.38,36.06],bird:"灰喜鹊",bestTime:"春秋迁徙季",species:"灰喜鹊、红嘴鸥、白鹭",desc:"海滨观鸟好去处，迁徙季海鸟和过境鸟种多"},
+];
+
+let hotspotChart = null;
+let hotspotMapLoaded = false;
+async function initHotspotMap(){
+  const container = document.getElementById("hotspotMap");
+  if(!container) return;
+  if(!hotspotChart){
+    hotspotChart = echarts.init(container);
+  }
+  if(!hotspotMapLoaded){
+    try{
+      const resp = await fetch("china_geo.json");
+      const geo = await resp.json();
+      echarts.registerMap("china", geo);
+      hotspotMapLoaded = true;
+    }catch(e){ return; }
+  }
+  const si = await loadSampleImages();
+  const scatterData = HOTSPOTS.map((h,i)=>({
+    name:h.name, value:[...h.coord, i],
+    itemStyle:{color:i===0?'#e8794a':'#4a7c59'}
+  }));
+  hotspotChart.setOption({
+    geo:{
+      map:"china", roam:true, zoom:1.2,
+      center:[108,34],
+      itemStyle:{areaColor:"#f0f7ed", borderColor:"#d4e6c8", borderWidth:0.8},
+      emphasis:{itemStyle:{areaColor:"#e0eede"}, label:{show:false}},
+      label:{show:false}
+    },
+    tooltip:{
+      trigger:"item",
+      formatter:p=>`<b>${p.name}</b><br/>${HOTSPOTS[p.value[2]].region} · ${HOTSPOTS[p.value[2]].bird}`,
+      backgroundColor:"rgba(255,255,255,0.95)",
+      borderColor:"#d4e6c8", textStyle:{color:"#2c4b2b",fontSize:13}
+    },
+    series:[{
+      type:"scatter", coordinateSystem:"geo", data:scatterData,
+      symbolSize:14, z:10,
+      label:{show:true, formatter:p=>p.name, position:"top", fontSize:11, color:"#2c4b2b", fontWeight:600, distance:8},
+      emphasis:{itemStyle:{shadowBlur:12, shadowColor:"rgba(74,124,89,0.5)", borderColor:"#fff", borderWidth:2}},
+      itemStyle:{color:"#4a7c59", borderColor:"#fff", borderWidth:1.5, shadowBlur:6, shadowColor:"rgba(0,0,0,0.2)"}
+    },{
+      type:"effectScatter", coordinateSystem:"geo",
+      data:scatterData, symbolSize:8, z:9,
+      rippleEffect:{scale:3, brushType:"stroke", period:4},
+      itemStyle:{color:"#7cc36a", opacity:0.6}
+    }]
+  });
+  hotspotChart.off("click");
+  hotspotChart.on("click", p=>{
+    if(p.seriesType === "scatter" || p.seriesType === "effectScatter"){
+      showHotspotInfo(p.value[2], si);
+    }
+  });
+  showHotspotInfo(0, si);
+}
+
+function showHotspotInfo(idx, si){
+  const h = HOTSPOTS[idx];
+  const info = document.getElementById("hotspotInfo");
+  if(!info) return;
+  const files = si[h.bird] || [];
+  const img = files[0] ? `data/sample/${encodeURIComponent(h.bird)}/${encodeURIComponent(files[0])}` : null;
+  info.innerHTML = `
+    <div class="hotspot-card">
+      ${img ? `<img src="${img}" alt="${h.bird}" class="hotspot-img" />` : '<div class="hotspot-img-placeholder">🐦</div>'}
+      <div class="hotspot-detail">
+        <h4>${h.name}<span class="hotspot-region">${h.region}</span></h4>
+        <p class="hotspot-desc">${h.desc}</p>
+        <div class="hotspot-field"><span class="hf-label">🕐 最佳观测</span><span class="hf-value">${h.bestTime}</span></div>
+        <div class="hotspot-field"><span class="hf-label">🐦 代表鸟种</span><span class="hf-value">${h.species}</span></div>
+      </div>
+    </div>`;
 }
 
 function downloadBlob(content, filename, type){

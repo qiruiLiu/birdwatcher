@@ -139,6 +139,21 @@ a{color:inherit;text-decoration:none}
 .hotspot-item h4{color:var(--green-dark)}
 .hotspot-item .hs-meta{color:var(--muted);font-size:13px}
 
+.hotspot-wrap{display:flex;gap:20px;margin-top:8px}
+.hotspot-map{flex:1 1 60%;height:480px;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#f0f7ed;min-width:0}
+.hotspot-info{flex:0 0 340px;display:flex;flex-direction:column}
+.hotspot-card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:all .3s ease}
+.hotspot-img{width:100%;height:200px;object-fit:cover;display:block}
+.hotspot-img-placeholder{width:100%;height:200px;display:flex;align-items:center;justify-content:center;font-size:48px;background:var(--brown-soft)}
+.hotspot-detail{padding:16px 18px}
+.hotspot-detail h4{color:var(--green-dark);font-size:17px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.hotspot-region{font-size:12px;font-weight:400;color:#fff;background:var(--green);padding:2px 8px;border-radius:10px}
+.hotspot-desc{color:var(--muted);font-size:13px;line-height:1.5;margin-bottom:14px}
+.hotspot-field{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}
+.hf-label{color:var(--green-dark);font-size:13px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.hf-value{color:var(--ink);font-size:13px;line-height:1.5}
+@media(max-width:768px){.hotspot-wrap{flex-direction:column}.hotspot-map{height:360px}.hotspot-info{flex:0 0 auto}}
+
 .footer{text-align:center;padding:30px 20px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);background:var(--brown-soft)}
 .footer-tip{font-size:12px;margin-top:6px;color:var(--brown)}
 
