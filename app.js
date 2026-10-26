@@ -377,26 +377,53 @@ async function realRecognize(blob){
     const badge = document.getElementById("resultBadge");
     if(badge) badge.textContent = "正在加载AI模型…";
     ort.env.wasm.wasmPaths = "./";
-    const modelResp = await fetch("bird_model.onnx?v=v52");
-    const total = +modelResp.headers.get("Content-Length") || 22409028;
-    const reader = modelResp.body.getReader();
-    let loaded = 0;
-    const chunks = [];
-    while(true){
-      const {done, value} = await reader.read();
-      if(done) break;
-      chunks.push(value);
-      loaded += value.length;
-      const pct = Math.min(99, Math.round(loaded/total*100));
-      if(badge) badge.textContent = `正在加载AI模型…${pct}%`;
+
+    let buffer = null;
+    const dbReq = indexedDB.open("birdwatcher_model", 1);
+    dbReq.onupgradeneeded = e => { e.target.result.createObjectStore("model"); };
+    const dbPromise = new Promise(res => {
+      dbReq.onsuccess = e => res(e.target.result);
+      dbReq.onerror = () => res(null);
+    });
+    const db = await dbPromise;
+    if(db){
+      buffer = await new Promise(res => {
+        const t = db.transaction("model", "readonly");
+        const r = t.objectStore("model").get("onnx");
+        r.onsuccess = () => res(r.result || null);
+        r.onerror = () => res(null);
+      });
+      if(buffer && badge) badge.textContent = "从缓存加载模型…";
     }
-    const buffer = new Uint8Array(loaded);
-    let offset = 0;
-    for(const c of chunks){ buffer.set(c, offset); offset += c.length; }
+
+    if(!buffer){
+      const modelResp = await fetch("bird_model.onnx?v=v52");
+      const total = +modelResp.headers.get("Content-Length") || 22409028;
+      const reader = modelResp.body.getReader();
+      let loaded = 0;
+      const chunks = [];
+      while(true){
+        const {done, value} = await reader.read();
+        if(done) break;
+        chunks.push(value);
+        loaded += value.length;
+        const pct = Math.min(99, Math.round(loaded/total*100));
+        if(badge) badge.textContent = `正在加载AI模型…${pct}%`;
+      }
+      buffer = new Uint8Array(loaded);
+      let offset = 0;
+      for(const c of chunks){ buffer.set(c, offset); offset += c.length; }
+      if(db){
+        const t = db.transaction("model", "readwrite");
+        t.objectStore("model").put(buffer, "onnx");
+      }
+    }
+
+    const classesPromise = fetch('classes.json?v=v52').then(r => r.json());
+
     if(badge) badge.textContent = "正在初始化模型…";
     ortSession = await ort.InferenceSession.create(buffer);
-    const resp = await fetch('classes.json?v=v52');
-    const cls = await resp.json();
+    const cls = await classesPromise;
     ortLabelMap = cls.map(name => BIRDS.findIndex(b => b.nameCn === name));
     ortReady = true;
   }
