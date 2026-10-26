@@ -1,4 +1,4 @@
-const CACHE_NAME = "birdwatcher-v7";
+const CACHE_NAME = "birdwatcher-v8";
 const CORE_FILES = [
   "./",
   "index.html",

@@ -17,6 +17,9 @@ var _hmt = _hmt || [];
 </script>
 
 <link rel="stylesheet" href="style.css" />
+<link rel="preload" as="fetch" href="bird_model.onnx?v=v52" crossorigin />
+<link rel="preload" as="fetch" href="ort-wasm-simd-threaded.wasm" crossorigin />
+<link rel="preload" as="fetch" href="ort-wasm-simd.wasm" crossorigin />
 </head>
 <body>
 <header class="topbar">
@@ -354,9 +357,9 @@ var _hmt = _hmt || [];
 </div>
 
 
-<script src="ort.min.js"></script>
-<script src="echarts.min.js"></script>
-<script src="app.js"></script>
+<script defer src="ort.min.js"></script>
+<script defer src="echarts.min.js"></script>
+<script defer src="app.js"></script>
 <script>
 if("serviceWorker" in navigator){
   navigator.serviceWorker.register("sw.js").catch(()=>{});

@@ -1427,5 +1427,7 @@ router();
   });
 })();
 window.addEventListener("load", ()=>{
-  setTimeout(()=>{ if(!ortReady && !ortLoading) ensureModelReady(null); }, 2000);
+  const start = ()=>{ if(!ortReady && !ortLoading) ensureModelReady(null); };
+  if("requestIdleCallback" in window) requestIdleCallback(start);
+  else setTimeout(start, 0);
 });
