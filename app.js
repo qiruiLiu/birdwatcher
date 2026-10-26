@@ -858,9 +858,8 @@ let hotspotMapLoaded = false;
 async function initHotspotMap(){
   const container = document.getElementById("hotspotMap");
   if(!container) return;
-  if(!hotspotChart){
-    hotspotChart = echarts.init(container);
-  }
+  if(hotspotChart){ hotspotChart.dispose(); }
+  hotspotChart = echarts.init(container);
   if(!hotspotMapLoaded){
     try{
       const resp = await fetch("china_geo.json");
