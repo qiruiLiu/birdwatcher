@@ -19,6 +19,9 @@ bird_best_backup_*.pth
 bird_model_fp32.onnx
 bird_model_fp32_51.onnx
 bird_model_backup_*.onnx
+bird_model_quant_*.onnx
+bird_model_fp32*.onnx
+_*.py
 ort-wasm.wasm
 ort-wasm-threaded.wasm
 ort-wasm-simd-threaded.wasm
