@@ -27,3 +27,4 @@ ort-wasm-threaded.wasm
 ort-wasm-simd-threaded.wasm
 ort-dist/
 .merkle-snapshot.json
+data/all.zip

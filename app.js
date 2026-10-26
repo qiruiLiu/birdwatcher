@@ -1293,3 +1293,30 @@ function bindEvents(){
 
 bindEvents();
 router();
+(function(){
+  const lb = document.getElementById("lightbox");
+  const lbImg = document.getElementById("lightboxImg");
+  const lbLoading = document.getElementById("lightboxLoading");
+  const lbClose = document.getElementById("lightboxClose");
+  if(!lb) return;
+  function openLightbox(hdUrl){
+    lb.hidden = false;
+    lbImg.src = "";
+    lbLoading.style.display = "block";
+    const img = new Image();
+    img.onload = ()=>{ lbImg.src = hdUrl; lbLoading.style.display = "none"; };
+    img.onerror = ()=>{ lbLoading.textContent = "大图加载失败"; };
+    img.src = hdUrl;
+  }
+  function closeLightbox(){ lb.hidden = true; lbImg.src = ""; }
+  lb.addEventListener("click", e=>{ if(e.target === lb || e.target === lbClose) closeLightbox(); });
+  document.addEventListener("keydown", e=>{ if(e.key === "Escape" && !lb.hidden) closeLightbox(); });
+  document.addEventListener("click", e=>{
+    const t = e.target;
+    if(t.tagName === "IMG" && t.src.includes("/data/sample/")){
+      e.stopPropagation();
+      const hdUrl = t.src.replace("/data/sample/", "/data/sample_hd/");
+      openLightbox(hdUrl);
+    }
+  });
+})();

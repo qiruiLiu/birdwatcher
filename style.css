@@ -261,3 +261,10 @@ a{color:inherit;text-decoration:none}
   .box-card img{max-height:180px}
   .ai-box-photos{grid-template-columns:repeat(2,1fr)}
 }
+.lightbox{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;cursor:zoom-out}
+.lightbox-img{max-width:92vw;max-height:88vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,0.5);object-fit:contain;cursor:default}
+.lightbox-close{position:fixed;top:16px;right:24px;font-size:36px;color:#fff;cursor:pointer;z-index:2001;line-height:1;opacity:0.8;transition:opacity .2s}
+.lightbox-close:hover{opacity:1}
+.lightbox-loading{position:absolute;color:#fff;font-size:15px;opacity:0.7}
+.lightbox-img:not([src=""])~.lightbox-loading{display:none}
+.ai-box-photos img,.ai-bird-card img{cursor:zoom-in}
