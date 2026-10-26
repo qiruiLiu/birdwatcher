@@ -308,7 +308,7 @@ function renderDaily(){
     if(files.length){
       const img = files[new Date().getDate() % files.length];
       const emojiEl = card.querySelector(".dc-emoji");
-      emojiEl.innerHTML = `<img src="data/sample/${encodeURIComponent(b.nameCn)}/${img}" alt="${b.nameCn}" style="width:88px;height:88px;border-radius:12px;object-fit:cover">`;
+      emojiEl.innerHTML = `<img src="data/sample/${encodeURIComponent(b.nameCn)}/${img}" alt="${b.nameCn}" loading="lazy" style="width:88px;height:88px;border-radius:12px;object-fit:cover">`;
     }
   });
   card.style.cursor = "pointer";
