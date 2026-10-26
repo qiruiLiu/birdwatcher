@@ -129,8 +129,9 @@ a{color:inherit;text-decoration:none}
 .guide-tab{padding:8px 18px;border-radius:20px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:14px;color:var(--ink)}
 .guide-tab.active{background:var(--green);color:#fff;border-color:var(--green)}
 .guide-content{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow)}
-.guide-content h3{color:var(--green-dark);margin:18px 0 8px}
+.guide-content h3{color:var(--green-dark);margin:18px 0 8px;font-size:18px}
 .guide-content h3:first-child{margin-top:0}
+.guide-content h4{color:var(--green);margin:14px 0 6px;font-size:15px;font-weight:600}
 .guide-content ul{padding-left:22px;color:var(--ink)}
 .guide-content li{margin-bottom:6px}
 .guide-content p{color:var(--ink);margin-bottom:10px}
