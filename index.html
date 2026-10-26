@@ -121,6 +121,7 @@ var _hmt = _hmt || [];
           <button class="btn btn-ghost" id="errCancel">取消</button>
           <button class="btn btn-primary" id="errSubmit">提交报告</button>
         </div>
+        <a class="modal-github-link" id="errGitHubLink" target="_blank">在 GitHub 上提交 →</a>
       </div>
     </div>
   </section>
@@ -316,9 +317,41 @@ var _hmt = _hmt || [];
 </main>
 
 <footer class="footer">
-  <p>羽见 BirdWatch · 前端课程课设作品 · 数据仅供演示</p>
+  <p>羽见 BirdWatch · 课程课设作品 · AI识别结果仅供参考</p>
   <p class="footer-tip">提示：本页需联网加载地图瓦片；图鉴数据存储于浏览器本地 IndexedDB。</p>
+  <div class="footer-actions">
+    <button class="btn btn-ghost btn-sm" id="feedbackBtn">反馈建议</button>
+    <a class="footer-dev-link" id="devEntry">开发者</a>
+  </div>
 </footer>
+
+<div class="modal" id="feedbackModal" hidden>
+  <div class="modal-box">
+    <h3>反馈与建议</h3>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:12px">感谢您的支持！请描述您的建议或遇到的问题。</p>
+    <label>内容 <textarea id="feedbackContent" rows="4" placeholder="如：建议增加XX功能 / 某页面显示异常..."></textarea></label>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="feedbackCancel">取消</button>
+      <button class="btn btn-primary" id="feedbackSubmit">提交</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="devModal" hidden>
+  <div class="modal-box" style="width:min(700px,94vw)">
+    <h3>开发者面板 · 反馈记录</h3>
+    <div class="dev-toolbar">
+      <span id="devCount" class="dev-count"></span>
+      <a class="btn btn-ghost btn-sm" href="https://github.com/the-wind-flow/birdwatcher/issues" target="_blank">GitHub Issues</a>
+      <button class="btn btn-ghost btn-sm" id="devExport">导出JSON</button>
+      <button class="btn btn-ghost btn-sm" id="devClear">清空</button>
+    </div>
+    <div class="dev-list" id="devList"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="devClose">关闭</button>
+    </div>
+  </div>
+</div>
 
 
 <script src="ort.min.js"></script>

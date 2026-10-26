@@ -1244,7 +1244,14 @@ function bindEvents(){
   document.getElementById("exportJsonBtn").onclick = ()=>exportRecords("json");
 
   const errorModal = document.getElementById("errorModal");
-  document.getElementById("reportError").onclick = ()=>{ errorModal.hidden = false; };
+  const REPO = "the-wind-flow/birdwatcher";
+  document.getElementById("reportError").onclick = ()=>{
+    errorModal.hidden = false;
+    const bird = currentRecognition?.bird?.nameCn || "未知";
+    const title = encodeURIComponent(`[识别错误] ${bird} 识别有误`);
+    const body = encodeURIComponent(`**AI识别结果**：${bird}\n**正确鸟种**：\n**问题描述**：\n\n---\n*请在上方填写正确信息*`);
+    document.getElementById("errGitHubLink").href = `https://github.com/${REPO}/issues/new?title=${title}&body=${body}`;
+  };
   document.getElementById("errCancel").onclick = ()=>{ errorModal.hidden = true; };
   errorModal.onclick = e=>{ if(e.target===errorModal) errorModal.hidden = true; };
   document.getElementById("errSubmit").onclick = async ()=>{
@@ -1264,6 +1271,62 @@ function bindEvents(){
     document.getElementById("errCorrectBird").value = "";
     document.getElementById("errDesc").value = "";
     showToast("感谢反馈！报告已记录 ✅");
+  };
+
+  const feedbackModal = document.getElementById("feedbackModal");
+  document.getElementById("feedbackBtn").onclick = ()=>{ feedbackModal.hidden = false; };
+  document.getElementById("feedbackCancel").onclick = ()=>{ feedbackModal.hidden = true; };
+  feedbackModal.onclick = e=>{ if(e.target===feedbackModal) feedbackModal.hidden = true; };
+  document.getElementById("feedbackSubmit").onclick = async ()=>{
+    const content = document.getElementById("feedbackContent").value.trim();
+    if(!content){showToast("请输入反馈内容");return;}
+    await dbAdd({type:"suggestion",content,observeDate:new Date().toISOString().slice(0,10),note:"用户建议"});
+    feedbackModal.hidden = true;
+    document.getElementById("feedbackContent").value = "";
+    showToast("感谢您的建议！已记录 ✅");
+  };
+
+  const devModal = document.getElementById("devModal");
+
+  document.getElementById("devEntry").onclick = async ()=>{
+    devModal.hidden = false;
+    const all = await dbAll();
+    const feedbacks = all.filter(r=>r.type==="errorReport"||r.type==="suggestion").sort((a,b)=>(b.id||0)-(a.id||0));
+    document.getElementById("devCount").textContent = `共 ${feedbacks.length} 条反馈`;
+    const list = document.getElementById("devList");
+    if(!feedbacks.length){
+      list.innerHTML = `<div style="text-align:center;padding:30px;color:var(--muted)">暂无反馈记录</div>`;
+      return;
+    }
+    list.innerHTML = feedbacks.map(r=>{
+      const isErr = r.type==="errorReport";
+      const typeLabel = isErr?"识别错误":"建议";
+      const date = r.observeDate||"未知日期";
+      let body = "";
+      if(isErr){
+        body = `<div class="dev-item-body">识别为：<span class="dev-item-bird">${r.nameCn||"未知"}</span>${r.correctBird?` → 应为：<span class="0">${r.correctBird}</span>`:""}<br/>${r.description||""}</div>`;
+      }else{
+        body = `<div class="dev-item-body">${r.content||""}</div>`;
+      }
+      return `<div class="dev-item"><div class="dev-item-head"><span class="dev-item-type ${isErr?'error':'suggest'}">${typeLabel}</span><span class="dev-item-date">${date}</span></div>${body}</div>`;
+    }).join("");
+  };
+  document.getElementById("devClose").onclick = ()=>{ devModal.hidden = true; };
+  devModal.onclick = e=>{ if(e.target===devModal) devModal.hidden = true; };
+  document.getElementById("devExport").onclick = async ()=>{
+    const all = await dbAll();
+    const feedbacks = all.filter(r=>r.type==="errorReport"||r.type==="suggestion");
+    downloadBlob(JSON.stringify(feedbacks,null,2),"feedback.json","application/json");
+    showToast("已导出 feedback.json");
+  };
+  document.getElementById("devClear").onclick = async ()=>{
+    showConfirm("确认清空所有反馈记录？此操作不可撤销。", async ()=>{
+      const all = await dbAll();
+      const feedbacks = all.filter(r=>r.type==="errorReport"||r.type==="suggestion");
+      for(const r of feedbacks){ await dbDel(r.id); }
+      document.getElementById("devEntry").click();
+      showToast("已清空反馈记录");
+    });
   };
 
   document.querySelectorAll(".guide-tab").forEach(t=>t.onclick=()=>renderGuide(t.dataset.tab));
