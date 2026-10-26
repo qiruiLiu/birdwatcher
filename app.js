@@ -377,6 +377,8 @@ async function realRecognize(blob){
     const badge = document.getElementById("resultBadge");
     if(badge) badge.textContent = "正在加载AI模型…";
     ort.env.wasm.wasmPaths = "./";
+    ort.env.wasm.numThreads = 1;
+    ort.env.wasm.proxy = false;
 
     let buffer = null;
     const dbReq = indexedDB.open("birdwatcher_model", 1);
