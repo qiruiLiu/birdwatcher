@@ -1,14 +1,26 @@
 data/all/
+data/thumb/
+data/train/
+data/val/
+data/all - 副本/
 *.pth
+*.log
 __pycache__/
 *.pyc
 fetch_provinces.py
 train.py
 export_onnx.py
+quantize_onnx.py
+tempCodeRunnerFile.py
+train.ipynb
 bird_provinces_auto.json
 bird_best.pth
-bird_best_backup_*.pthdata/thumb/
+bird_best_backup_*.pth
 bird_model_fp32.onnx
+bird_model_fp32_51.onnx
+bird_model_backup_*.onnx
 ort-wasm.wasm
 ort-wasm-threaded.wasm
 ort-wasm-simd-threaded.wasm
+ort-dist/
+.merkle-snapshot.json

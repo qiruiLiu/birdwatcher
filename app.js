@@ -49,7 +49,109 @@ const BIRDS = [
    habitats:[{lat:28.68,lng:115.89,name:"鄱阳湖湿地"},{lat:29.05,lng:111.47,name:"洞庭湖"},{lat:39.99,lng:116.30,name:"北京颐和园"}]},
   {id:17,nameCn:"斑嘴鸭",nameLatin:"Anas zonorhyncha",protect:"国家三有保护动物",
    color:[140,120,90],diet:"杂食，以水草、种子和昆虫为食",habit:"栖息于湖泊、池塘和湿地，常成群活动",breeding:"4—7月繁殖，营巢于水边草丛或地面",
-   habitats:[{lat:28.68,lng:115.89,name:"鄱阳湖湿地"},{lat:29.05,lng:111.47,name:"洞庭湖"},{lat:30.27,lng:120.15,name:"杭州西溪湿地"}]}
+   habitats:[{lat:28.68,lng:115.89,name:"鄱阳湖湿地"},{lat:29.05,lng:111.47,name:"洞庭湖"},{lat:30.27,lng:120.15,name:"杭州西溪湿地"}]},
+  {id:18,nameCn:"凤头麦鸡",nameLatin:"Vanellus vanellus",protect:"国家三有保护动物",
+   color:[80,90,120],diet:"以昆虫、蠕虫和种子为食",habit:"栖息于农田、湿地和河滩，常成小群活动",breeding:"4—6月繁殖，营巢于地面浅坑",
+   habitats:[{lat:39.9,lng:116.4,name:"北京野鸭湖"}, {lat:34.27,lng:108.95,name:"西安渭河滩"}, {lat:45.75,lng:126.63,name:"哈尔滨松花江"}]},
+  {id:19,nameCn:"普通鸬鹚",nameLatin:"Phalacrocorax carbo",protect:"国家三有保护动物",
+   color:[50,50,55],diet:"以鱼为主食，潜水捕鱼",habit:"栖息于湖泊、河流和水库，常成群停栖于岩石或树枝",breeding:"4—6月繁殖，营巢于悬崖或树上",
+   habitats:[{lat:28.68,lng:115.89,name:"鄱阳湖湿地"}, {lat:30.27,lng:120.15,name:"杭州千岛湖"}, {lat:39.99,lng:116.3,name:"北京颐和园"}]},
+  {id:20,nameCn:"池鹭",nameLatin:"Ardeola bacchus",protect:"国家三有保护动物",
+   color:[180,160,90],diet:"以鱼、虾、蛙和昆虫为食",habit:"栖息于稻田、池塘和沼泽，常单独涉水觅食",breeding:"5—7月繁殖，与其它鹭类混群营巢于树上",
+   habitats:[{lat:28.68,lng:115.89,name:"鄱阳湖湿地"}, {lat:30.57,lng:104.07,name:"成都浣花溪公园"}, {lat:23.13,lng:113.26,name:"广州南沙湿地"}]},
+  {id:21,nameCn:"灰头麦鸡",nameLatin:"Vanellus cinereus",protect:"国家三有保护动物",
+   color:[90,95,100],diet:"以昆虫、螺和种子为食",habit:"栖息于河滩、农田和草地，常成对或小群活动",breeding:"4—6月繁殖，营巢于地面",
+   habitats:[{lat:29.05,lng:111.47,name:"洞庭湖"}, {lat:34.27,lng:108.95,name:"西安渭河滩"}, {lat:36.06,lng:120.38,name:"青岛大沽河"}]},
+  {id:22,nameCn:"白腰草鹬",nameLatin:"Tringa ochropus",protect:"国家三有保护动物",
+   color:[120,115,100],diet:"以昆虫、甲壳类和蠕虫为食",habit:"栖息于溪流、沼泽和稻田，常单独或成对活动",breeding:"5—7月繁殖，营巢于树上旧巢或地面",
+   habitats:[{lat:28.68,lng:115.89,name:"鄱阳湖湿地"}, {lat:30.27,lng:120.15,name:"杭州西溪湿地"}, {lat:22.54,lng:113.93,name:"珠海淇澳岛"}]},
+  {id:23,nameCn:"红嘴鸥",nameLatin:"Chroicocephalus ridibundus",protect:"国家三有保护动物",
+   color:[200,200,210],diet:"杂食，以鱼、昆虫和废弃物为食",habit:"栖息于湖泊、河流和城市水域，冬候鸟，常成大群",breeding:"4—6月繁殖，营巢于湿地地面",
+   habitats:[{lat:28.68,lng:115.89,name:"鄱阳湖湿地"}, {lat:24.88,lng:102.83,name:"昆明滇池"}, {lat:29.05,lng:111.47,name:"洞庭湖"}]},
+  {id:24,nameCn:"苍鹭",nameLatin:"Ardea cinerea",protect:"国家三有保护动物",
+   color:[130,135,140],diet:"以鱼、虾、蛙和水生昆虫为食",habit:"栖息于湖泊、河流和湿地，常长时间静立水中伺机捕食",breeding:"4—6月繁殖，群巢于高大乔木或芦苇丛",
+   habitats:[{lat:28.68,lng:115.89,name:"鄱阳湖湿地"}, {lat:39.99,lng:116.3,name:"北京颐和园"}, {lat:30.27,lng:120.15,name:"杭州西溪湿地"}]},
+  {id:25,nameCn:"赤麻鸭",nameLatin:"Tadorna ferruginea",protect:"国家三有保护动物",
+   color:[220,150,60],diet:"以水草、种子和昆虫为食",habit:"栖息于湖泊、河流和湿地，冬季常见",breeding:"4—6月繁殖，营巢于地面或土洞",
+   habitats:[{lat:39.9,lng:116.4,name:"北京野鸭湖"}, {lat:36.67,lng:117.0,name:"济南黄河"}, {lat:28.68,lng:115.89,name:"鄱阳湖湿地"}]},
+  {id:26,nameCn:"鸳鸯",nameLatin:"Aix galericulata",protect:"国家二级保护动物",
+   color:[200,80,60],diet:"杂食，以坚果、昆虫和水草为食",habit:"栖息于山地溪流和湖泊，营巢于树洞",breeding:"4—6月繁殖，营巢于水边树洞",
+   habitats:[{lat:45.75,lng:126.63,name:"哈尔滨鸳鸯湖"}, {lat:30.27,lng:120.15,name:"杭州西溪湿地"}, {lat:27.72,lng:101.71,name:"四川稻城"}]},
+  {id:27,nameCn:"红隼",nameLatin:"Falco tinnunculus",protect:"国家二级保护动物",
+   color:[170,120,80],diet:"以小型鼠类、昆虫和蜥蜴为食",habit:"栖息于开阔地带，常悬停空中伺机捕食",breeding:"4—6月繁殖，营巢于岩缝或占他鸟旧巢",
+   habitats:[{lat:39.9,lng:116.4,name:"北京百望山"}, {lat:34.27,lng:108.95,name:"西安秦岭"}, {lat:36.67,lng:117.0,name:"济南南部山区"}]},
+  {id:28,nameCn:"黑鸢",nameLatin:"Milvus migrans",protect:"国家二级保护动物",
+   color:[80,75,70],diet:"以鱼、小型动物和腐肉为食",habit:"栖息于河流、湖泊和海岸附近，常高空盘旋",breeding:"3—5月繁殖，营巢于高大乔木",
+   habitats:[{lat:28.68,lng:115.89,name:"鄱阳湖湿地"}, {lat:39.9,lng:116.4,name:"北京百望山"}, {lat:22.54,lng:113.93,name:"珠海淇澳岛"}]},
+  {id:29,nameCn:"大斑啄木鸟",nameLatin:"Dendrocopos major",protect:"国家三有保护动物",
+   color:[80,80,70],diet:"以树干昆虫和幼虫为食",habit:"栖息于阔叶林和针阔混交林，常攀树干敲击觅食",breeding:"4—6月繁殖，凿树洞营巢",
+   habitats:[{lat:40.08,lng:116.6,name:"北京怀柔"}, {lat:30.57,lng:103.93,name:"成都青城山"}, {lat:36.67,lng:117.0,name:"济南南部山区"}]},
+  {id:30,nameCn:"大杜鹃",nameLatin:"Cuculus canorus",protect:"国家三有保护动物",
+   color:[110,105,95],diet:"以昆虫为主，尤喜毛虫",habit:"栖息于林地和灌丛，巢寄生，鸣声两声一度",breeding:"5—7月繁殖，寄生多种小型雀鸟巢",
+   habitats:[{lat:39.9,lng:116.4,name:"北京奥森公园"}, {lat:30.57,lng:104.07,name:"成都浣花溪公园"}, {lat:27.72,lng:101.71,name:"四川稻城"}]},
+  {id:31,nameCn:"山斑鸠",nameLatin:"Streptopelia orientalis",protect:"国家三有保护动物",
+   color:[130,110,90],diet:"以种子、果实和谷物为食",habit:"栖息于山地林地、农田和公园，常成对活动",breeding:"4—9月繁殖，营巢于树上，巢简陋",
+   habitats:[{lat:40.08,lng:116.6,name:"北京怀柔"}, {lat:30.57,lng:103.93,name:"成都青城山"}, {lat:36.67,lng:117.0,name:"济南南部山区"}]},
+  {id:32,nameCn:"灰喜鹊",nameLatin:"Cyanopica cyanus",protect:"国家三有保护动物",
+   color:[90,110,150],diet:"杂食，以昆虫、果实和种子为食",habit:"栖息于林地、公园和农田，常成小群活动",breeding:"4—6月繁殖，营巢于乔木侧枝",
+   habitats:[{lat:34.27,lng:108.95,name:"西安城墙下"}, {lat:39.9,lng:116.4,name:"北京奥森公园"}, {lat:36.67,lng:117.0,name:"济南大明湖"}]},
+  {id:33,nameCn:"灰头绿啄木鸟",nameLatin:"Picus canus",protect:"国家三有保护动物",
+   color:[100,120,70],diet:"以蚂蚁和树干昆虫为食",habit:"栖息于阔叶林和竹林，常地面觅食蚂蚁",breeding:"4—6月繁殖，凿树洞营巢",
+   habitats:[{lat:30.57,lng:103.93,name:"成都青城山"}, {lat:40.08,lng:116.6,name:"北京怀柔"}, {lat:25.04,lng:102.72,name:"云南昆明西山"}]},
+  {id:34,nameCn:"蓝翡翠",nameLatin:"Halcyon pileata",protect:"国家三有保护动物",
+   color:[40,80,160],diet:"以鱼、虾和水生昆虫为食",habit:"栖息于溪流、河流和山塘，常停栖于枝头俯冲捕鱼",breeding:"5—7月繁殖，营巢于岸边土崖掘洞",
+   habitats:[{lat:24.48,lng:118.09,name:"厦门筼筜湖"}, {lat:23.13,lng:113.26,name:"广州从化溪流"}, {lat:28.01,lng:120.65,name:"温州楠溪江"}]},
+  {id:35,nameCn:"三道眉草鹀",nameLatin:"Emberiza tristrami",protect:"国家三有保护动物",
+   color:[120,100,70],diet:"以种子和昆虫为食",habit:"栖息于山地灌丛和草坡，常地面觅食",breeding:"5—7月繁殖，营巢于灌丛地面",
+   habitats:[{lat:40.08,lng:116.6,name:"北京怀柔"}, {lat:30.57,lng:103.93,name:"成都青城山"}, {lat:36.67,lng:117.0,name:"济南南部山区"}]},
+  {id:36,nameCn:"北红尾鸲",nameLatin:"Phoenicurus auroreus",protect:"国家三有保护动物",
+   color:[170,80,60],diet:"以昆虫和少量果实为食",habit:"栖息于林地边缘、灌丛和村庄，常停栖于低处",breeding:"5—7月繁殖，营巢于墙缝、树洞或石隙",
+   habitats:[{lat:39.9,lng:116.4,name:"北京奥森公园"}, {lat:30.57,lng:104.07,name:"成都浣花溪公园"}, {lat:34.27,lng:108.95,name:"西安秦岭"}]},
+  {id:37,nameCn:"大山雀",nameLatin:"Parus minor",protect:"国家三有保护动物",
+   color:[60,70,50],diet:"以昆虫和种子为食",habit:"栖息于林地、果园和公园，常成小群活动",breeding:"3—8月繁殖，营巢于树洞或人工巢箱",
+   habitats:[{lat:39.9,lng:116.4,name:"北京奥森公园"}, {lat:31.23,lng:121.47,name:"上海世纪公园"}, {lat:30.57,lng:104.07,name:"成都浣花溪公园"}]},
+  {id:38,nameCn:"暗绿绣眼鸟",nameLatin:"Zosterops japonicus",protect:"国家三有保护动物",
+   color:[130,150,90],diet:"以昆虫、花蜜和浆果为食",habit:"栖息于阔叶林、果园和公园，常成群活动",breeding:"3—8月繁殖，营巢于枝杈，巢精巧悬碗状",
+   habitats:[{lat:23.13,lng:113.26,name:"广州白云山"}, {lat:22.27,lng:113.58,name:"深圳莲花山"}, {lat:31.23,lng:121.47,name:"上海世纪公园"}]},
+  {id:39,nameCn:"树鹨",nameLatin:"Anthus trivialis",protect:"国家三有保护动物",
+   color:[110,115,90],diet:"以昆虫和种子为食",habit:"栖息于开阔林地、草地和农田，常地面行走觅食",breeding:"5—7月繁殖，营巢于地面草丛",
+   habitats:[{lat:39.9,lng:116.4,name:"北京奥森公园"}, {lat:45.75,lng:126.63,name:"哈尔滨松花江"}, {lat:34.27,lng:108.95,name:"西安秦岭"}]},
+  {id:40,nameCn:"灰椋鸟",nameLatin:"Spodiopsar cineraceus",protect:"国家三有保护动物",
+   color:[100,100,105],diet:"杂食，以昆虫和果实为食",habit:"栖息于林地、农田和城市，常成大群活动",breeding:"4—6月繁殖，营巢于树洞或岩缝",
+   habitats:[{lat:39.9,lng:116.4,name:"北京天坛公园"}, {lat:31.23,lng:121.47,name:"上海世纪公园"}, {lat:36.06,lng:120.38,name:"青岛海边"}]},
+  {id:41,nameCn:"画眉",nameLatin:"Garrulax canorus",protect:"国家二级保护动物",
+   color:[130,100,70],diet:"杂食，以昆虫和果实为食",habit:"栖息于灌丛和竹林，鸣声婉转动听，常藏匿于密灌",breeding:"3—7月繁殖，营巢于灌丛或低树",
+   habitats:[{lat:30.57,lng:103.93,name:"成都青城山"}, {lat:25.04,lng:102.72,name:"云南昆明西山"}, {lat:30.57,lng:104.07,name:"成都浣花溪公园"}]},
+  {id:42,nameCn:"白鹡鸰",nameLatin:"Motacilla alba",protect:"国家三有保护动物",
+   color:[90,90,95],diet:"以昆虫为主食",habit:"栖息于水边、农田和城市，常地面行走，尾上下摆动",breeding:"3—8月繁殖，营巢于石缝或建筑缝隙",
+   habitats:[{lat:39.9,lng:116.4,name:"北京颐和园"}, {lat:31.23,lng:121.47,name:"上海外滩"}, {lat:23.13,lng:113.26,name:"广州白云山"}]},
+  {id:43,nameCn:"红头长尾山雀",nameLatin:"Aegithalos concinnus",protect:"国家三有保护动物",
+   color:[170,60,60],diet:"以昆虫和花蜜为食",habit:"栖息于山地阔叶林和灌丛，常成小群在枝间跳跃",breeding:"3—5月繁殖，营巢于枝杈，巢卵形侧开口",
+   habitats:[{lat:30.57,lng:103.93,name:"成都青城山"}, {lat:25.04,lng:102.72,name:"云南昆明西山"}, {lat:27.72,lng:101.71,name:"四川稻城"}]},
+  {id:44,nameCn:"红胁蓝尾鸲",nameLatin:"Tarsiger cyanurus",protect:"国家三有保护动物",
+   color:[60,80,150],diet:"以昆虫和少量果实为食",habit:"栖息于针阔混交林和灌丛，冬候鸟，常地面觅食",breeding:"5—7月繁殖，营巢于地面或灌丛",
+   habitats:[{lat:39.9,lng:116.4,name:"北京奥森公园"}, {lat:45.75,lng:126.63,name:"哈尔滨松花江"}, {lat:40.08,lng:116.6,name:"北京怀柔"}]},
+  {id:45,nameCn:"金翅雀",nameLatin:"Chloris sinica",protect:"国家三有保护动物",
+   color:[200,170,60],diet:"以种子和昆虫为食",habit:"栖息于林地、果园和公园，常成小群活动",breeding:"3—8月繁殖，营巢于乔木侧枝",
+   habitats:[{lat:39.9,lng:116.4,name:"北京奥森公园"}, {lat:31.23,lng:121.47,name:"上海世纪公园"}, {lat:30.57,lng:104.07,name:"成都浣花溪公园"}]},
+  {id:46,nameCn:"领雀嘴鹎",nameLatin:"Spizixos semitorques",protect:"国家三有保护动物",
+   color:[100,130,70],diet:"杂食，以果实、花和昆虫为食",habit:"栖息于山地阔叶林和灌丛，常成小群活动",breeding:"4—7月繁殖，营巢于灌丛或矮树",
+   habitats:[{lat:30.57,lng:103.93,name:"成都青城山"}, {lat:25.04,lng:102.72,name:"云南昆明西山"}, {lat:30.57,lng:104.07,name:"成都浣花溪公园"}]},
+  {id:47,nameCn:"鹊鸲",nameLatin:"Copsychus saularis",protect:"国家三有保护动物",
+   color:[80,80,80],diet:"以昆虫为主，兼食果实",habit:"栖息于村落、果园和公园，鸣声多变动听",breeding:"3—8月繁殖，营巢于树洞、墙缝或枝杈",
+   habitats:[{lat:23.13,lng:113.26,name:"广州白云山"}, {lat:22.27,lng:113.58,name:"深圳莲花山"}, {lat:20.05,lng:110.32,name:"海口东寨港"}]},
+  {id:48,nameCn:"黑尾蜡嘴雀",nameLatin:"Eophona migratoria",protect:"国家三有保护动物",
+   color:[80,75,65],diet:"以种子、果实和昆虫为食",habit:"栖息于阔叶林和公园，常成小群活动",breeding:"5—7月繁殖，营巢于乔木侧枝",
+   habitats:[{lat:39.9,lng:116.4,name:"北京奥森公园"}, {lat:40.08,lng:116.6,name:"北京怀柔"}, {lat:36.67,lng:117.0,name:"济南南部山区"}]},
+  {id:49,nameCn:"黑脸噪鹛",nameLatin:"Garrulax perspicillatus",protect:"国家三有保护动物",
+   color:[90,85,75],diet:"杂食，以昆虫和果实为食",habit:"栖息于灌丛、竹林和林缘，常成小群在地面活动",breeding:"3—8月繁殖，营巢于灌丛或低树",
+   habitats:[{lat:23.13,lng:113.26,name:"广州白云山"}, {lat:22.27,lng:113.58,name:"深圳莲花山"}, {lat:25.04,lng:102.72,name:"云南昆明西山"}]},
+  {id:50,nameCn:"黑水鸡",nameLatin:"Gallinula chloropus",protect:"国家三有保护动物",
+   color:[60,60,60],diet:"以水草、昆虫和螺为食",habit:"栖息于池塘、沼泽和稻田，常在水面浮游觅食",breeding:"4—9月繁殖，营巢于水边草丛",
+   habitats:[{lat:28.68,lng:115.89,name:"鄱阳湖湿地"}, {lat:30.27,lng:120.15,name:"杭州西溪湿地"}, {lat:23.13,lng:113.26,name:"广州南沙湿地"}]},
+  {id:0,nameCn:"非鸟类",nameLatin:"—",protect:"—",
+   color:[128,128,128],diet:"—",habit:"—",breeding:"—",
+   habitats:[]}
 ];
 
 const birdById = new Map(BIRDS.map(b=>[b.id,b]));
@@ -87,6 +189,39 @@ const BIRD_PROVINCES = {
   15: ["北京", "天津", "上海", "重庆", "河北", "山西", "辽宁", "江苏", "浙江", "安徽", "福建", "江西", "山东", "河南", "湖北", "湖南", "广东", "广西", "海南", "四川", "贵州", "云南", "陕西", "青海", "宁夏", "香港", "澳门", "台湾"],
   16: ["北京", "江苏", "广东", "浙江", "上海", "四川", "新疆", "云南", "山东", "湖北", "安徽", "河南", "广西", "河北", "青海", "内蒙古", "黑龙江", "山西", "甘肃", "贵州", "天津", "辽宁", "西藏", "陕西", "吉林", "湖南", "福建", "重庆", "江西", "宁夏", "海南"],
   17: ["浙江", "山东", "江苏", "上海", "北京", "广东", "安徽", "福建", "河北", "河南", "江西", "四川", "陕西", "山西", "湖北", "天津", "辽宁", "黑龙江", "云南", "甘肃", "内蒙古", "广西", "湖南", "贵州", "重庆", "青海", "吉林", "海南"],
+  18: ["黑龙江", "吉林", "辽宁", "内蒙古", "新疆", "北京", "河北", "天津", "山东", "江苏", "青海", "甘肃", "宁夏", "河南", "山西", "陕西", "四川", "云南", "湖北", "湖南", "江西", "浙江", "广东", "广西", "海南"],
+  19: ["北京", "天津", "河北", "辽宁", "山东", "江苏", "浙江", "上海", "湖北", "湖南", "江西", "广东", "福建", "四川", "云南", "贵州", "广西", "海南", "安徽", "河南", "重庆", "陕西", "山西", "黑龙江", "吉林", "新疆", "西藏"],
+  20: ["江苏", "浙江", "上海", "安徽", "湖北", "湖南", "江西", "广东", "福建", "四川", "重庆", "广西", "海南", "河南", "山东", "云南", "贵州", "河北", "辽宁", "陕西", "天津", "香港"],
+  21: ["黑龙江", "吉林", "辽宁", "内蒙古", "北京", "河北", "天津", "山东", "江苏", "上海", "浙江", "安徽", "河南", "湖北", "湖南", "江西", "四川", "云南", "贵州", "广西", "广东", "福建", "陕西", "山西", "甘肃", "青海"],
+  22: ["黑龙江", "吉林", "辽宁", "河北", "北京", "天津", "山东", "江苏", "上海", "浙江", "安徽", "河南", "湖北", "湖南", "江西", "广东", "福建", "四川", "云南", "广西", "海南", "重庆", "贵州", "陕西", "山西", "内蒙古", "新疆", "甘肃", "青海"],
+  23: ["云南", "贵州", "四川", "重庆", "湖北", "湖南", "江西", "浙江", "江苏", "上海", "安徽", "广东", "广西", "福建", "海南", "山东", "河南", "河北", "北京", "天津", "辽宁", "西藏", "陕西", "山西", "香港", "澳门"],
+  24: ["北京", "天津", "河北", "辽宁", "吉林", "黑龙江", "山东", "江苏", "上海", "浙江", "安徽", "河南", "湖北", "湖南", "江西", "广东", "广西", "福建", "海南", "四川", "云南", "贵州", "重庆", "陕西", "山西", "甘肃", "青海", "内蒙古", "新疆", "宁夏", "香港"],
+  25: ["黑龙江", "吉林", "辽宁", "内蒙古", "新疆", "青海", "甘肃", "宁夏", "西藏", "四川", "云南", "贵州", "河北", "北京", "天津", "山西", "陕西", "山东", "河南", "湖北", "湖南", "江苏", "浙江", "上海", "安徽", "江西", "广东", "广西", "海南", "重庆"],
+  26: ["黑龙江", "吉林", "辽宁", "河北", "北京", "山西", "陕西", "山东", "河南", "湖北", "湖南", "江苏", "浙江", "上海", "安徽", "江西", "四川", "云南", "贵州", "重庆", "广西", "广东", "福建", "甘肃", "青海", "内蒙古", "新疆", "天津", "海南"],
+  27: ["北京", "天津", "河北", "山西", "辽宁", "吉林", "黑龙江", "山东", "江苏", "上海", "浙江", "安徽", "河南", "湖北", "湖南", "江西", "广东", "广西", "福建", "海南", "四川", "云南", "贵州", "重庆", "陕西", "甘肃", "青海", "内蒙古", "新疆", "宁夏", "西藏"],
+  28: ["北京", "天津", "河北", "山西", "辽宁", "吉林", "黑龙江", "山东", "江苏", "上海", "浙江", "安徽", "河南", "湖北", "湖南", "江西", "广东", "广西", "福建", "海南", "四川", "云南", "贵州", "重庆", "陕西", "甘肃", "青海", "内蒙古", "新疆", "宁夏", "西藏", "香港", "澳门", "台湾"],
+  29: ["黑龙江", "吉林", "辽宁", "内蒙古", "北京", "河北", "天津", "山东", "江苏", "上海", "浙江", "安徽", "河南", "湖北", "湖南", "江西", "广东", "广西", "福建", "海南", "四川", "云南", "贵州", "重庆", "陕西", "山西", "甘肃", "青海", "新疆", "宁夏", "西藏"],
+  30: ["黑龙江", "吉林", "辽宁", "内蒙古", "北京", "河北", "天津", "山东", "江苏", "上海", "浙江", "安徽", "河南", "湖北", "湖南", "江西", "广东", "广西", "福建", "海南", "四川", "云南", "贵州", "重庆", "陕西", "山西", "甘肃", "青海", "新疆", "宁夏", "西藏"],
+  31: ["黑龙江", "吉林", "辽宁", "内蒙古", "新疆", "青海", "甘肃", "宁夏", "西藏", "河北", "北京", "天津", "山西", "陕西", "山东", "河南", "湖北", "湖南", "江苏", "浙江", "上海", "安徽", "江西", "四川", "云南", "贵州", "重庆", "广东", "广西", "福建", "海南"],
+  32: ["北京", "天津", "河北", "山西", "辽宁", "吉林", "黑龙江", "山东", "江苏", "上海", "浙江", "安徽", "河南", "湖北", "湖南", "江西", "四川", "陕西", "甘肃", "青海", "内蒙古", "新疆", "宁夏", "广东", "广西", "福建", "海南", "云南", "贵州", "重庆"],
+  33: ["黑龙江", "吉林", "辽宁", "内蒙古", "北京", "河北", "天津", "山东", "江苏", "浙江", "安徽", "河南", "湖北", "湖南", "江西", "广东", "广西", "福建", "四川", "云南", "贵州", "重庆", "陕西", "山西", "甘肃", "青海", "新疆", "海南"],
+  34: ["广东", "广西", "福建", "海南", "浙江", "江苏", "上海", "安徽", "江西", "湖南", "湖北", "四川", "云南", "贵州", "河南", "山东", "河北", "辽宁", "陕西", "重庆", "香港", "澳门", "天津"],
+  35: ["黑龙江", "吉林", "辽宁", "内蒙古", "河北", "北京", "天津", "山西", "陕西", "山东", "河南", "湖北", "湖南", "江苏", "浙江", "上海", "安徽", "江西", "四川", "云南", "贵州", "重庆", "甘肃", "青海", "新疆", "宁夏", "福建", "广东", "广西", "海南"],
+  36: ["黑龙江", "吉林", "辽宁", "内蒙古", "北京", "河北", "天津", "山西", "陕西", "山东", "河南", "湖北", "湖南", "江苏", "浙江", "上海", "安徽", "江西", "广东", "广西", "福建", "海南", "四川", "云南", "贵州", "重庆", "甘肃", "青海", "新疆", "宁夏", "西藏"],
+  37: ["黑龙江", "吉林", "辽宁", "内蒙古", "北京", "河北", "天津", "山西", "陕西", "山东", "河南", "湖北", "湖南", "江苏", "浙江", "上海", "安徽", "江西", "广东", "广西", "福建", "海南", "四川", "云南", "贵州", "重庆", "甘肃", "青海", "新疆", "宁夏", "西藏", "香港", "澳门", "台湾"],
+  38: ["广东", "广西", "福建", "海南", "浙江", "江苏", "上海", "安徽", "江西", "湖南", "湖北", "四川", "云南", "贵州", "重庆", "河南", "山东", "河北", "辽宁", "陕西", "北京", "天津", "香港", "澳门", "台湾"],
+  39: ["黑龙江", "吉林", "辽宁", "内蒙古", "新疆", "青海", "甘肃", "宁夏", "西藏", "河北", "北京", "天津", "山西", "陕西", "山东", "河南", "湖北", "湖南", "江苏", "浙江", "上海", "安徽", "江西", "四川", "云南", "贵州", "重庆", "广东", "广西", "福建", "海南"],
+  40: ["黑龙江", "吉林", "辽宁", "内蒙古", "北京", "河北", "天津", "山西", "陕西", "山东", "河南", "湖北", "湖南", "江苏", "浙江", "上海", "安徽", "江西", "广东", "广西", "福建", "海南", "四川", "云南", "贵州", "重庆", "甘肃", "青海", "新疆", "宁夏"],
+  41: ["四川", "重庆", "云南", "贵州", "湖北", "湖南", "广西", "广东", "福建", "海南", "江西", "浙江", "江苏", "上海", "安徽", "陕西", "甘肃", "河南", "西藏"],
+  42: ["北京", "天津", "河北", "山西", "辽宁", "吉林", "黑龙江", "山东", "江苏", "上海", "浙江", "安徽", "河南", "湖北", "湖南", "江西", "广东", "广西", "福建", "海南", "四川", "云南", "贵州", "重庆", "陕西", "甘肃", "青海", "内蒙古", "新疆", "宁夏", "西藏", "香港", "澳门", "台湾"],
+  43: ["四川", "云南", "贵州", "重庆", "湖北", "湖南", "广西", "广东", "福建", "江西", "浙江", "西藏", "甘肃", "陕西", "河南", "安徽", "海南"],
+  44: ["黑龙江", "吉林", "辽宁", "内蒙古", "新疆", "青海", "甘肃", "宁夏", "西藏", "河北", "北京", "天津", "山西", "陕西", "山东", "河南", "湖北", "湖南", "江苏", "浙江", "上海", "安徽", "江西", "四川", "云南", "贵州", "重庆", "广东", "广西", "福建", "海南"],
+  45: ["黑龙江", "吉林", "辽宁", "内蒙古", "北京", "河北", "天津", "山西", "陕西", "山东", "河南", "湖北", "湖南", "江苏", "浙江", "上海", "安徽", "江西", "广东", "广西", "福建", "海南", "四川", "云南", "贵州", "重庆", "甘肃", "青海", "新疆", "宁夏", "西藏", "香港", "澳门", "台湾"],
+  46: ["四川", "重庆", "云南", "贵州", "湖北", "湖南", "广西", "广东", "福建", "海南", "江西", "浙江", "陕西", "甘肃", "河南", "安徽", "西藏"],
+  47: ["广东", "广西", "福建", "海南", "浙江", "江苏", "上海", "安徽", "江西", "湖南", "湖北", "河南", "四川", "云南", "贵州", "重庆", "陕西", "山东", "河北", "辽宁", "北京", "天津", "香港", "澳门", "台湾"],
+  48: ["黑龙江", "吉林", "辽宁", "内蒙古", "北京", "河北", "天津", "山西", "陕西", "山东", "河南", "湖北", "湖南", "江苏", "浙江", "上海", "安徽", "江西", "广东", "广西", "福建", "四川", "云南", "贵州", "重庆", "甘肃", "青海", "新疆", "宁夏", "海南"],
+  49: ["广东", "广西", "福建", "海南", "浙江", "江苏", "上海", "安徽", "江西", "湖南", "湖北", "河南", "四川", "云南", "贵州", "重庆", "陕西", "山东", "河北", "辽宁", "北京", "天津", "香港", "澳门", "台湾"],
+  50: ["北京", "天津", "河北", "辽宁", "吉林", "黑龙江", "山东", "江苏", "上海", "浙江", "安徽", "河南", "湖北", "湖南", "江西", "广东", "广西", "福建", "海南", "四川", "云南", "贵州", "重庆", "陕西", "山西", "甘肃", "青海", "内蒙古", "新疆", "宁夏", "香港", "澳门", "台湾"]
 };
 
 function showToast(msg, type){
@@ -150,15 +285,16 @@ let sampleImages = null;
 async function loadSampleImages(){
   if(sampleImages) return sampleImages;
   try{
-    const resp = await fetch("sample_images.json?v=quant");
+    const resp = await fetch("sample_images.json?v=v51");
     sampleImages = await resp.json();
   }catch(e){ sampleImages = {}; }
   return sampleImages;
 }
 
 function renderDaily(){
-  const idx = new Date().getDate() % BIRDS.length;
-  const b = BIRDS[idx];
+  const realBirds = BIRDS.filter(b => b.nameCn !== "非鸟类");
+  const idx = new Date().getDate() % realBirds.length;
+  const b = realBirds[idx];
   const card = document.getElementById("dailyCard");
   card.innerHTML = `
     <div class="dc-emoji"></div>
@@ -222,7 +358,8 @@ function avgColor(blob){
 }
 
 function mockRecognize(rgb){
-  const scored = BIRDS.map(b=>{
+  const realBirds = BIRDS.filter(b => b.nameCn !== "非鸟类");
+  const scored = realBirds.map(b=>{
     const [r,g,bb]=rgb,[cr,cg,cb]=b.color;
     const dist = Math.sqrt((r-cr)**2+(g-cg)**2+(bb-cb)**2);
     return {bird:b, dist};
@@ -240,8 +377,8 @@ async function realRecognize(blob){
     const badge = document.getElementById("resultBadge");
     if(badge) badge.textContent = "正在加载AI模型…";
     ort.env.wasm.wasmPaths = "./";
-    const modelResp = await fetch("bird_model.onnx?v=quant");
-    const total = +modelResp.headers.get("Content-Length") || 44731440;
+    const modelResp = await fetch("bird_model.onnx?v=v51");
+    const total = +modelResp.headers.get("Content-Length") || 11206656;
     const reader = modelResp.body.getReader();
     let loaded = 0;
     const chunks = [];
@@ -258,7 +395,7 @@ async function realRecognize(blob){
     for(const c of chunks){ buffer.set(c, offset); offset += c.length; }
     if(badge) badge.textContent = "正在初始化模型…";
     ortSession = await ort.InferenceSession.create(buffer);
-    const resp = await fetch('classes.json?v=quant');
+    const resp = await fetch('classes.json?v=v51');
     const cls = await resp.json();
     ortLabelMap = cls.map(name => BIRDS.findIndex(b => b.nameCn === name));
     ortReady = true;
@@ -303,7 +440,7 @@ async function handleFile(file){
     let cands, entropy = 0;
     try{
       const result = await realRecognize(blob);
-      cands = result.cands; entropy =(result.entropy;
+      cands = result.cands; entropy = result.entropy;
     }catch(e){
       console.warn("ONNX 模型不可用，降级模拟识别:", e);
       document.getElementById("resultBadge").textContent = "⚠️ AI模型加载失败，使用模拟识别";
@@ -318,14 +455,21 @@ async function handleFile(file){
 }
 
 function showResult(cands, blob, entropy){
+  const birdCands = cands.filter(c => c.bird && c.bird.nameCn !== "非鸟类");
   const top = cands[0];
-  const b = top.bird;
-  const pct = (top.prob*100).toFixed(0);
+  const b = birdCands.length > 0 ? birdCands[0].bird : null;
+  const topProb = birdCands.length > 0 ? birdCands[0].prob : 0;
+  const pct = (topProb*100).toFixed(0);
   const badge = document.getElementById("resultBadge");
-  const isNonBird = top.prob < 0.20 || entropy > 0.75;
-  const isUncertain = !isNonBird && (top.prob < 0.35 || entropy > 0.55);
+  const isNonBirdClass = top.bird && top.bird.nameCn === "非鸟类";
+  const isNonBird = isNonBirdClass || topProb < 0.20 || entropy > 0.75;
+  const isUncertain = !isNonBird && (topProb < 0.35 || entropy > 0.55);
   if(isNonBird){
-    badge.textContent = `⚠️ 未能识别为鸟类（${pct}%）`;
+    if(isNonBirdClass){
+      badge.textContent = `⚠️ 模型判定为非鸟类（${(top.prob*100).toFixed(0)}%）`;
+    }else{
+      badge.textContent = `⚠️ 未能识别为鸟类（${pct}%）`;
+    }
     badge.style.background = "#fdecea";
     badge.style.color = "#c0392b";
     document.getElementById("resultName").textContent = "非鸟类图片";
@@ -353,7 +497,7 @@ function showResult(cands, blob, entropy){
   document.getElementById("resultDiet").textContent = b.diet;
   document.getElementById("resultHabit").textContent = b.habit;
   document.getElementById("resultBreeding").textContent = b.breeding;
-  const candHtml = cands.map(c=>`<span class="cand" data-id="${c.bird.id}">${c.bird.nameCn} ${(c.prob*100).toFixed(0)}%</span>`).join("");
+  const candHtml = birdCands.slice(0,3).map(c=>`<span class="cand" data-id="${c.bird.id}">${c.bird.nameCn} ${(c.prob*100).toFixed(0)}%</span>`).join("");
   document.getElementById("resultCandidates").innerHTML = "候选："+candHtml;
   const setMapJump = (bird)=>{
     document.getElementById("viewDistribution").onclick = ()=>{
@@ -384,10 +528,10 @@ let echartsChart = null, chinaMapLoaded = false;
 async function initDistribution(birdId){
   const sel = document.getElementById("distBirdSelect");
   if(!sel.options.length){
-    BIRDS.forEach(b=>{const o=document.createElement("option");o.value=b.id;o.textContent=b.nameCn;sel.appendChild(o);});
+    BIRDS.filter(b=>b.nameCn!=="非鸟类").forEach(b=>{const o=document.createElement("option");o.value=b.id;o.textContent=b.nameCn;sel.appendChild(o);});
     sel.onchange = ()=>initDistribution(+sel.value);
   }
-  if(!birdId) birdId = +sel.value || BIRDS[0].id;
+  if(!birdId) birdId = +sel.value || 1;
   sel.value = birdId;
   const b = birdById.get(birdId);
   if(!echartsChart){
@@ -599,6 +743,7 @@ async function renderAiBirdGuide(){
   const searchTerm = (document.getElementById("aiBirdSearch").value||"").trim().toLowerCase();
   const groupFilter = document.getElementById("aiBirdGroup").value;
   const filtered = BIRDS.filter(b=>{
+    if(b.nameCn === "非鸟类") return false;
     if(groupFilter && birdToGroup[b.id] !== groupFilter) return false;
     if(searchTerm && !b.nameCn.toLowerCase().includes(searchTerm) && !b.nameLatin.toLowerCase().includes(searchTerm)) return false;
     return true;
@@ -754,7 +899,7 @@ function bindEvents(){
     const term = distSearch.value.trim().toLowerCase();
     const cur = distSelect.value;
     distSelect.innerHTML = "";
-    BIRDS.filter(b=>!term || b.nameCn.toLowerCase().includes(term) || b.nameLatin.toLowerCase().includes(term)).forEach(b=>{
+    BIRDS.filter(b=>b.nameCn!=="非鸟类" && (!term || b.nameCn.toLowerCase().includes(term) || b.nameLatin.toLowerCase().includes(term))).forEach(b=>{
       const o=document.createElement("option");o.value=b.id;o.textContent=b.nameCn;distSelect.appendChild(o);
     });
     if([...distSelect.options].some(o=>o.value===cur)) distSelect.value=cur;
@@ -1001,7 +1146,7 @@ function bindEvents(){
   const modal = document.getElementById("recordModal");
   const recBird = document.getElementById("recBird");
   document.getElementById("addRecordBtn").onclick = ()=>{
-    if(!recBird.options.length) BIRDS.forEach(b=>{const o=document.createElement("option");o.value=b.id;o.textContent=b.nameCn;recBird.appendChild(o);});
+    if(!recBird.options.length) BIRDS.filter(b=>b.nameCn!=="非鸟类").forEach(b=>{const o=document.createElement("option");o.value=b.id;o.textContent=b.nameCn;recBird.appendChild(o);});
     document.getElementById("recDate").value = new Date().toISOString().slice(0,10);
     modal.hidden = false;
   };
