@@ -357,10 +357,11 @@ var _hmt = _hmt || [];
   <div class="modal-box" style="width:min(420px,92vw)">
     <h3>反馈已记录</h3>
     <p style="color:var(--ink);margin-bottom:6px">感谢您的反馈！已保存在本地。</p>
-    <p style="color:var(--muted);font-size:13px;margin-bottom:16px">如希望开发者及时看到，请点击下方按钮在 GitHub 提交（开发者会收到邮件通知）：</p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" id="notifySkip">稍后</button>
-      <a class="btn btn-primary" id="notifyGitHubLink" target="_blank">通知开发者</a>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:16px">如希望开发者及时看到，请选择以下方式通知（均无需注册账号）：</p>
+    <div class="modal-actions" style="flex-direction:column;gap:8px">
+      <a class="btn btn-primary" id="notifyEmailLink" style="width:100%;text-align:center">发邮件通知开发者</a>
+      <a class="btn btn-ghost" id="notifyGitHubLink" target="_blank" style="width:100%;text-align:center">在 GitHub 提交</a>
+      <button class="btn btn-ghost" id="notifySkip" style="width:100%">稍后</button>
     </div>
   </div>
 </div>

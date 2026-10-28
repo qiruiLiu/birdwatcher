@@ -249,8 +249,13 @@ function showConfirm(msg, onConfirm){
 
 function showNotifyDialog(githubUrl){
   const modal = document.getElementById("notifyModal");
-  const link = document.getElementById("notifyGitHubLink");
-  link.href = githubUrl;
+  const ghLink = document.getElementById("notifyGitHubLink");
+  const emailLink = document.getElementById("notifyEmailLink");
+  ghLink.href = githubUrl;
+  const url = new URL(githubUrl);
+  const title = url.searchParams.get("title") || "用户反馈";
+  const body = url.searchParams.get("body") || "";
+  emailLink.href = `mailto:the-wind-flow@users.noreply.github.com?subject=${title}&body=${body}`;
   modal.hidden = false;
   const skip = document.getElementById("notifySkip");
   const cleanup = ()=>{ modal.hidden=true; skip.onclick=null; modal.onclick=null; };
