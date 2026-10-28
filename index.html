@@ -353,6 +353,18 @@ var _hmt = _hmt || [];
   </div>
 </div>
 
+<div class="modal" id="notifyModal" hidden>
+  <div class="modal-box" style="width:min(420px,92vw)">
+    <h3>反馈已记录</h3>
+    <p style="color:var(--ink);margin-bottom:6px">感谢您的反馈！已保存在本地。</p>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:16px">如希望开发者及时看到，请点击下方按钮在 GitHub 提交（开发者会收到邮件通知）：</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="notifySkip">稍后</button>
+      <a class="btn btn-primary" id="notifyGitHubLink" target="_blank">通知开发者</a>
+    </div>
+  </div>
+</div>
+
 
 <script src="ort.min.js" defer></script>
 <script src="echarts.min.js" defer></script>

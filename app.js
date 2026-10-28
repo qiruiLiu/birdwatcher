@@ -247,6 +247,17 @@ function showConfirm(msg, onConfirm){
   modal.onclick = e=>{ if(e.target===modal) cleanup(); };
 }
 
+function showNotifyDialog(githubUrl){
+  const modal = document.getElementById("notifyModal");
+  const link = document.getElementById("notifyGitHubLink");
+  link.href = githubUrl;
+  modal.hidden = false;
+  const skip = document.getElementById("notifySkip");
+  const cleanup = ()=>{ modal.hidden=true; skip.onclick=null; modal.onclick=null; };
+  skip.onclick = cleanup;
+  modal.onclick = e=>{ if(e.target===modal) cleanup(); };
+}
+
 function openDB(){
   return new Promise((res,rej)=>{
     const req = indexedDB.open("birdwatcher",1);
@@ -977,6 +988,7 @@ async function initHotspotMap(){
     }
   });
   showHotspotInfo(0, si);
+  setTimeout(()=>hotspotChart.resize(), 100);
 }
 
 function showHotspotInfo(idx, si){
@@ -1287,10 +1299,11 @@ function bindEvents(){
     const correct = document.getElementById("errCorrectBird").value.trim();
     const desc = document.getElementById("errDesc").value.trim();
     if(!desc){showToast("请描述识别错误的情况");return;}
+    const birdName = currentRecognition?.bird?.nameCn || "未知";
     await dbAdd({
       type:"errorReport",
       birdId: currentRecognition?.bird?.id || null,
-      nameCn: currentRecognition?.bird?.nameCn || "未知",
+      nameCn: birdName,
       correctBird: correct,
       description: desc,
       observeDate: new Date().toISOString().slice(0,10),
@@ -1299,7 +1312,9 @@ function bindEvents(){
     errorModal.hidden = true;
     document.getElementById("errCorrectBird").value = "";
     document.getElementById("errDesc").value = "";
-    showToast("感谢反馈！报告已记录 ✅");
+    const title = encodeURIComponent(`[识别错误] ${birdName}→${correct||"?"}`);
+    const body = encodeURIComponent(`**AI识别结果**：${birdName}\n**正确鸟种**：${correct||"未知"}\n**描述**：${desc}\n\n*此反馈来自网页端用户提交*`);
+    showNotifyDialog(`https://github.com/${REPO}/issues/new?title=${title}&body=${body}`);
   };
 
   const feedbackModal = document.getElementById("feedbackModal");
@@ -1312,7 +1327,9 @@ function bindEvents(){
     await dbAdd({type:"suggestion",content,observeDate:new Date().toISOString().slice(0,10),note:"用户建议"});
     feedbackModal.hidden = true;
     document.getElementById("feedbackContent").value = "";
-    showToast("感谢您的建议！已记录 ✅");
+    const title = encodeURIComponent(`[建议] ${content.slice(0,20)}`);
+    const body = encodeURIComponent(`${content}\n\n*此反馈来自网页端用户提交*`);
+    showNotifyDialog(`https://github.com/${REPO}/issues/new?title=${title}&body=${body}`);
   };
 
   const devModal = document.getElementById("devModal");
